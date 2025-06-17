@@ -19,8 +19,6 @@ The Shuttle Tracker web-app lets students see the exact location of their colleg
 
 ## 🚀 Tech Stack
 - **Frontend:** React 18 + Vite
-- **Backend:** (TBD) REST / WebSocket for real-time updates
-- **Mapping:** Leaflet / Mapbox GL (to be integrated)
 
 ---
 
