@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Student from './pages/Student';
 import Driver from './pages/Driver';
 import Schedule from './pages/Schedule';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/schedule" element={<Schedule />} />
           </Routes>
         </main>
+        <Footer />
       </div>
     </Router>
   );
