@@ -7,7 +7,7 @@ function Navbar() {
   });
 
   useEffect(() => {
-    document.body.classList.toggle('dark-theme', theme === 'dark');
+    document.body.classList.toggle('dark', theme === 'dark');
     localStorage.setItem('theme', theme);
   }, [theme]);
 

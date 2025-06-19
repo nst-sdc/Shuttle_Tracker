@@ -1,4 +1,8 @@
 :root {
+  --bg: #fff;
+  --text: #222;
+  --toggle-bg: #e2e8f0;
+
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -29,8 +33,9 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background: var(--bg-color);
-  color: var(--text-color);
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.4s cubic-bezier(.4,2,.6,1), color 0.4s cubic-bezier(.4,2,.6,1);
 }
 
 h1 {
@@ -70,19 +75,14 @@ button:focus-visible {
   }
 }
 
-.dark-theme {
-  --bg-color: #18181b;
-  --text-color: #f4f4f5;
-  --primary: #2563eb;
-  background-color: #18181b !important;
-  color: #f4f4f5 !important;
+.dark {
+  --bg: #18181b;
+  --text: #f4f4f5;
+  --toggle-bg: #334155;
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
 }
-
-.dark-theme a {
-  color: #60a5fa;
-}
-
-.dark-theme button {
-  background-color: #27272a;
-  color: #f4f4f5;
+body, html {
+  transition: background-color 0.3s, color 0.3s;
 }
