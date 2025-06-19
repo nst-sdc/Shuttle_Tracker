@@ -7,6 +7,7 @@ import Student from './pages/Student';
 import Driver from './pages/Driver';
 import Schedule from './pages/Schedule';
 import Footer from './components/Footer';
+import ThemeToggle from './ThemeToggle';
 
 function App() {
   const [dark, setDark] = useState(() => {
@@ -29,6 +30,7 @@ function App() {
     <Router>
       <div style={{ minHeight: '100vh', width: '100vw' }}>
         <Navbar />
+        <ThemeToggle />
         <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }}>
           <button onClick={() => setDark(d => !d)}>
             Switch to {dark ? "Light" : "Dark"} Mode
