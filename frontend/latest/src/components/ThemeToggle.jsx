@@ -63,4 +63,4 @@ const ThemeToggle = () => {
   );
 };
 
-export
+export default ThemeToggle;
