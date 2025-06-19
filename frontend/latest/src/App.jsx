@@ -11,7 +11,7 @@ import Footer from './components/Footer';
 function App() {
   return (
     <Router>
-      <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', width: '100vw' }}>
+      <div style={{ minHeight: '100vh', width: '100vw' }}>
         <Navbar />
         <main style={{
           width: '100%',
