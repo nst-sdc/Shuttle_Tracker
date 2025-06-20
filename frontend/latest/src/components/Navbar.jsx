@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Logo from '../assets/logo/shuttle-tracker-logo.svg?react';
 
 function Navbar() {
   const [theme, setTheme] = useState(() => {
@@ -47,8 +48,7 @@ function Navbar() {
         alignItems: 'center',
         gap: '0.5rem'
       }}>
-        <span style={{ fontSize: '1.8rem' }}>🚍</span>
-        <span>Shuttle Tracker</span>
+        <Logo style={{ height: '2.2rem', width: 'auto', display: 'block' }} />
       </Link>
       <div style={{ 
         display: 'flex', 
