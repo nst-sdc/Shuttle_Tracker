@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Logo from '../assets/logo/shuttle-tracker-logo.svg?react';
 
 function Navbar() {
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'light';
+  });
+
+  useEffect(() => {
+    document.body.classList.toggle('dark', theme === 'dark');
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+  };
+
   const navLinkStyle = {
     color: '#fff',
     textDecoration: 'none',
@@ -34,8 +48,7 @@ function Navbar() {
         alignItems: 'center',
         gap: '0.5rem'
       }}>
-        <span style={{ fontSize: '1.8rem' }}>🚍</span>
-        <span>Shuttle Tracker</span>
+        <Logo style={{ height: '2.2rem', width: 'auto', display: 'block' }} />
       </Link>
       <div style={{ 
         display: 'flex', 
@@ -46,6 +59,9 @@ function Navbar() {
         <Link to="/student" style={navLinkStyle}>Student</Link>
         <Link to="/driver" style={navLinkStyle}>Driver</Link>
         <Link to="/schedule" style={navLinkStyle}>Schedule</Link>
+        <button onClick={toggleTheme} style={{ marginLeft: '1rem', background: 'none', color: '#fff', border: '1px solid #fff' }}>
+          {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
+        </button>
       </div>
     </nav>
   );

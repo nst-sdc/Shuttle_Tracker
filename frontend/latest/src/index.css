@@ -1,16 +1,21 @@
 :root {
+  --bg: #fff;
+  --text: #222;
+  --toggle-bg: #e2e8f0;
+
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --bg-color: #fff;
+  --text-color: #18181b;
+  --primary: #2563eb;
 }
 
 a {
@@ -28,6 +33,9 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.4s cubic-bezier(.4,2,.6,1), color 0.4s cubic-bezier(.4,2,.6,1);
 }
 
 h1 {
@@ -65,4 +73,16 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.dark {
+  --bg: #18181b;
+  --text: #f4f4f5;
+  --toggle-bg: #334155;
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+}
+body, html {
+  transition: background-color 0.3s, color 0.3s;
 }

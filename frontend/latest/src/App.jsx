@@ -6,11 +6,12 @@ import Home from './pages/Home';
 import Student from './pages/Student';
 import Driver from './pages/Driver';
 import Schedule from './pages/Schedule';
+import Footer from './components/Footer';
 
 function App() {
   return (
     <Router>
-      <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', width: '100vw' }}>
+      <div style={{ minHeight: '100vh', width: '100vw' }}>
         <Navbar />
         <main style={{
           width: '100%',
@@ -24,6 +25,7 @@ function App() {
             <Route path="/schedule" element={<Schedule />} />
           </Routes>
         </main>
+        <Footer />
       </div>
     </Router>
   );
