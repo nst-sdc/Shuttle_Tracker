@@ -5,13 +5,17 @@ function Footer() {
         <footer style={{
             backgroundColor: '#2563eb',
             color: '#fff',
-            padding: '1rem 2rem',
+            padding: 'clamp(1rem, 3vw, 2rem)',
             textAlign: 'center',
-            position: 'fixed',
-            bottom: 0,
             width: '100%',
+            marginTop: 'auto'
         }}>
-            <p>© 2025 Shuttle Tracker. All rights reserved</p>
+            <p style={{
+                margin: 0,
+                fontSize: 'clamp(0.9rem, 2vw, 1rem)'
+            }}>
+                © 2025 Shuttle Tracker. All rights reserved
+            </p>
         </footer>
     )
 }
