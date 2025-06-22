@@ -11,12 +11,20 @@ import Footer from './components/Footer';
 function App() {
   return (
     <Router>
-      <div style={{ minHeight: '100vh', width: '100vw' }}>
+      <div style={{ 
+        minHeight: '100vh', 
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
         <Navbar />
         <main style={{
+          flex: 1,
           width: '100%',
           padding: '2rem',
           boxSizing: 'border-box',
+          maxWidth: '1200px',
+          margin: '0 auto'
         }}>
           <Routes>
             <Route path="/" element={<Home />} />
