@@ -68,8 +68,22 @@ function Student() {
       </div>
       <h1 style={titleStyle}>Student Dashboard</h1>
       <form onSubmit={handleLogin} style={{ maxWidth: 350, margin: '2rem auto', display: 'flex', flexDirection: 'column', gap: '1rem', background: '#f1f5f9', padding: '2rem', borderRadius: 8 }}>
-        <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required style={{ padding: '0.5rem', borderRadius: 4, border: '1px solid #cbd5e1' }} />
-        <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required style={{ padding: '0.5rem', borderRadius: 4, border: '1px solid #cbd5e1' }} />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          required
+          style={{ padding: '0.5rem', borderRadius: 4, border: '1px solid #cbd5e1' }}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          required
+          style={{ padding: '0.5rem', borderRadius: 4, border: '1px solid #cbd5e1' }}
+        />
         <button type="submit" disabled={loading} style={{ padding: '0.5rem', borderRadius: 4, background: '#2563eb', color: '#fff', border: 'none', fontWeight: 'bold' }}>
           {loading ? 'Logging in...' : 'Login'}
         </button>

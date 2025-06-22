@@ -13,13 +13,15 @@ import 'react-toastify/dist/ReactToastify.css';
 function App() {
   return (
     <Router>
-      <div style={{ minHeight: '100vh', width: '100vw' }}>
+      <div style={{
+        minHeight: '100vh',
+        width: '100vw'
+      }}>
         <Navbar />
         <ToastContainer position="top-center" autoClose={2500} />
         <main style={{
           width: '100%',
-          padding: '2rem',
-          boxSizing: 'border-box',
+          padding: '2rem'
         }}>
           <Routes>
             <Route path="/" element={<Home />} />
