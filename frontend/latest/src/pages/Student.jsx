@@ -14,6 +14,7 @@ function Student() {
     return () => clearInterval(timer);
   }, []);
 
+  // Login handler with toast notifications
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -30,7 +31,7 @@ function Student() {
     }
   };
 
-  // Add the new style constants
+  // All style constants
   const containerStyle = {
     padding: 'clamp(1rem, 3vw, 2rem)',
     maxWidth: '800px',
@@ -45,12 +46,27 @@ function Student() {
     textAlign: 'center'
   };
 
+  const titleStyle = {
+    color: 'var(--text, #1e293b)',
+    fontSize: 'clamp(2rem, 5vw, 3rem)',
+    marginBottom: '1rem',
+    textAlign: 'center'
+  };
+
+  const descriptionStyle = {
+    color: 'var(--text, #334155)',
+    opacity: 0.8,
+    fontSize: 'clamp(1rem, 2.5vw, 1.1rem)',
+    textAlign: 'center',
+    lineHeight: 1.6
+  };
+
   return (
     <div style={containerStyle}>
       <div style={timeStyle}>
         {dateTime.toLocaleString()}
       </div>
-      <h1 style={{ color: '#1e293b', textAlign: 'center' }}>Student Dashboard</h1>
+      <h1 style={titleStyle}>Student Dashboard</h1>
       <form onSubmit={handleLogin} style={{ maxWidth: 350, margin: '2rem auto', display: 'flex', flexDirection: 'column', gap: '1rem', background: '#f1f5f9', padding: '2rem', borderRadius: 8 }}>
         <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required style={{ padding: '0.5rem', borderRadius: 4, border: '1px solid #cbd5e1' }} />
         <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required style={{ padding: '0.5rem', borderRadius: 4, border: '1px solid #cbd5e1' }} />
@@ -58,7 +74,7 @@ function Student() {
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
-      <p style={{ color: '#334155', textAlign: 'center' }}>Track your shuttle and request pickups here.</p>
+      <p style={descriptionStyle}>Track your shuttle and request pickups here.</p>
     </div>
   );
 }
