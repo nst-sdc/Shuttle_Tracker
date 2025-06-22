@@ -30,12 +30,27 @@ function Student() {
     }
   };
 
+  // Add the new style constants
+  const containerStyle = {
+    padding: 'clamp(1rem, 3vw, 2rem)',
+    maxWidth: '800px',
+    margin: '0 auto'
+  };
+
+  const timeStyle = {
+    marginBottom: '1rem',
+    fontWeight: 'bold',
+    fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
+    color: '#475569',
+    textAlign: 'center'
+  };
+
   return (
-    <div style={{ padding: '2rem' }}>
-      <div style={{ marginBottom: '1rem', fontWeight: 'bold', fontSize: '1.2rem', color: '#475569' }}>
+    <div style={containerStyle}>
+      <div style={timeStyle}>
         {dateTime.toLocaleString()}
       </div>
-      <h1 style={{ color: '#1e293b' }}>Student Dashboard</h1>
+      <h1 style={{ color: '#1e293b', textAlign: 'center' }}>Student Dashboard</h1>
       <form onSubmit={handleLogin} style={{ maxWidth: 350, margin: '2rem auto', display: 'flex', flexDirection: 'column', gap: '1rem', background: '#f1f5f9', padding: '2rem', borderRadius: 8 }}>
         <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required style={{ padding: '0.5rem', borderRadius: 4, border: '1px solid #cbd5e1' }} />
         <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required style={{ padding: '0.5rem', borderRadius: 4, border: '1px solid #cbd5e1' }} />
@@ -43,7 +58,7 @@ function Student() {
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
-      <p style={{ color: '#334155' }}>Track your shuttle and request pickups here.</p>
+      <p style={{ color: '#334155', textAlign: 'center' }}>Track your shuttle and request pickups here.</p>
     </div>
   );
 }
