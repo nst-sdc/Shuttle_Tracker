@@ -7,12 +7,15 @@ import Student from './pages/Student';
 import Driver from './pages/Driver';
 import Schedule from './pages/Schedule';
 import Footer from './components/Footer';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     <Router>
       <div style={{ minHeight: '100vh', width: '100vw' }}>
         <Navbar />
+        <ToastContainer position="top-center" autoClose={2500} />
         <main style={{
           width: '100%',
           padding: '2rem',
