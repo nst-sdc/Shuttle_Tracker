@@ -7,14 +7,66 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  /* color: rgba(255, 255, 255, 0.87); */
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    color-scheme: dark;
+    color: rgb(var(--foreground));
+  }
+}
+
+h1 {
+  @apply text-4xl font-bold text-gray-900 dark:text-gray-100;
+}
+
+h2 {
+  @apply text-3xl font-semibold text-gray-800 dark:text-gray-200;
+}
+
+h3 {
+  @apply text-2xl font-semibold text-gray-800 dark:text-gray-200;
+}
+
+p {
+  @apply text-gray-700 dark:text-gray-300;
+}
+
+:root {
+  --bg: #fff;
+  --text: #222;
+  --toggle-bg: #e2e8f0;
+
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  /* color: rgba(255, 255, 255, 0.87); */
+  background-color: #242424;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --bg-color: #fff;
+  --text-color: #18181b;
+  --primary: #2563eb;
 }
 
 a {
@@ -28,10 +80,16 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.4s cubic-bezier(.4,2,.6,1), color 0.4s cubic-bezier(.4,2,.6,1);
+  overflow-x: hidden;
+}
+
+html {
+  overflow-x: hidden;
 }
 
 h1 {
@@ -68,5 +126,140 @@ button:focus-visible {
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+
+.dark {
+  --bg: #18181b;
+  --text: #f4f4f5;
+  --toggle-bg: #334155;
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+}
+body, html {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.5em;
+  }
+  
+  button {
+    padding: 0.5em 1em;
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2em;
+  }
+  
+  button {
+    padding: 0.4em 0.8em;
+    font-size: 0.85em;
+  }
+  nav {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  .mobile-menu-btn {
+    margin-right: 0.25rem;
+  }
+}
+
+/* Navbar Responsive Styles */
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: block !important;
+  }
+  
+  .desktop-nav {
+    display: none !important;
+  }
+  
+  .mobile-nav-overlay {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-menu-btn {
+    display: none !important;
+  }
+  
+  .desktop-nav {
+    display: flex !important;
+  }
+  
+  .mobile-nav-overlay {
+    display: none !important;
+  }
+}
+
+/* Tablet Styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  h1 {
+    font-size: 2.8em;
+  }
+}
+
+/* Large Screen Styles */
+@media (min-width: 1025px) {
+  h1 {
+    font-size: 3.2em;
+  }
+}
+
+/* Prevent body scroll when mobile menu is open */
+body.menu-open {
+  overflow: hidden;
+}
+
+/* Ensure proper touch targets on mobile */
+@media (max-width: 768px) {
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Mobile menu overlay improvements */
+.mobile-nav-overlay {
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Focus styles for accessibility */
+button:focus,
+a:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --primary: #0000ff;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

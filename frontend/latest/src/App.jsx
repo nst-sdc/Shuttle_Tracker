@@ -7,19 +7,13 @@ import Student from './pages/Student';
 import Driver from './pages/Driver';
 import Schedule from './pages/Schedule';
 import Footer from './components/Footer';
-import StudentLogin from './pages/StudentLogin';
-import DriverLogin from './pages/DriverLogin';
 
 function App() {
   return (
     <Router>
-      <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', width: '100vw' }}>
+      <div className="flex flex-col min-h-screen w-full bg-white dark:bg-gray-900 transition-colors duration-200" >
         <Navbar />
-        <main style={{
-          width: '100%',
-          padding: '2rem',
-          boxSizing: 'border-box',
-        }}>
+        <main className="w-full p-8 box-border flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/student" element={<Student />} />

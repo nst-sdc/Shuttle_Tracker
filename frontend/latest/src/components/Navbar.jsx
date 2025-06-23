@@ -1,54 +1,116 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ThemeToggle } from './ThemeToggle';
+import Logo from '../assets/logo/shuttle-tracker-logo.svg?react';
 
 function Navbar() {
-  const navLinkStyle = {
-    color: '#fff',
-    textDecoration: 'none',
-    padding: '0.5rem 1rem',
-    borderRadius: '6px',
-    transition: 'all 0.3s ease',
-    ':hover': {
-      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    }
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+    // Prevent scrolling when menu is open
+    document.body.classList.toggle('menu-open', !isMenuOpen);
   };
 
   return (
-    <nav style={{
-      backgroundColor: '#2563eb',
-      padding: '1rem 2rem',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-      position: 'sticky',
-      top: 0,
-      zIndex: 1000
-    }}>
-      <Link to="/" style={{ 
-        color: '#fff', 
-        fontSize: '1.5rem', 
-        fontWeight: 'bold',
-        textDecoration: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.5rem'
-      }}>
-        <span style={{ fontSize: '1.8rem' }}>🚍</span>
-        <span>Shuttle Tracker</span>
+    <nav className="bg-blue-600 dark:bg-gray-800 text-white p-4 px-8 flex justify-between items-center shadow-md sticky top-0 z-10 transition-colors duration-200">
+      <Link
+        to="/"
+        className="text-white text-xl font-bold no-underline flex items-center gap-2"
+      >
+      
+        <Logo style={{ height: '2.2rem', width: 'auto', display: 'block' }} />
       </Link>
-      <div style={{ 
-        display: 'flex', 
-        gap: '1.5rem',
-        alignItems: 'center'
-      }}>
-        <Link to="/" style={navLinkStyle}>Home</Link>
-        <Link to="/student" style={navLinkStyle}>Student</Link>
-        <Link to="/driver" style={navLinkStyle}>Driver</Link>
-        <Link to="/schedule" style={navLinkStyle}>Schedule</Link>
+
+      {/* Mobile menu button */}
+      <button
+        className="mobile-menu-btn lg:hidden text-white p-2 focus:outline-none"
+        onClick={toggleMenu}
+        aria-label="Toggle menu"
+      >
+        {isMenuOpen ? (
+          <span className="text-2xl">✕</span>
+        ) : (
+          <span className="text-2xl">☰</span>
+        )}
+      </button>
+
+      {/* Desktop navigation */}
+      <div className="hidden lg:flex items-center gap-6">
+        <Link
+          to="/"
+          className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+        >
+          Home
+        </Link>
+        <Link
+          to="/student"
+          className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+        >
+          Student
+        </Link>
+        <Link
+          to="/driver"
+          className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+        >
+          Driver
+        </Link>
+        <Link
+          to="/schedule"
+          className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+        >
+          Schedule
+        </Link>
+        <ThemeToggle />
       </div>
+
+      {/* Mobile navigation overlay */}
+      {isMenuOpen && (
+        <div className="fixed inset-0 bg-blue-800/95 dark:bg-gray-900/95 z-50 flex flex-col items-center justify-center mobile-nav-overlay">
+          <button
+            className="absolute top-4 right-8 text-white text-2xl"
+            onClick={toggleMenu}
+            aria-label="Close menu"
+          >
+            ✕
+          </button>
+          <div className="flex flex-col items-center gap-6 text-xl">
+            <Link
+              to="/"
+              className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+              onClick={toggleMenu}
+            >
+              Home
+            </Link>
+            <Link
+              to="/student"
+              className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+              onClick={toggleMenu}
+            >
+              Student
+            </Link>
+            <Link
+              to="/driver"
+              className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+              onClick={toggleMenu}
+            >
+              Driver
+            </Link>
+            <Link
+              to="/schedule"
+              className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+              onClick={toggleMenu}
+            >
+              Schedule
+            </Link>
+            <div className="mt-4">
+              <ThemeToggle />
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
 
-export default Navbar; 
+export default Navbar;
