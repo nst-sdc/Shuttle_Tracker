@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Student() {
   const [dateTime, setDateTime] = useState(new Date());
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -39,13 +45,55 @@ function Student() {
     lineHeight: 1.6
   };
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    // Simulate API call
+    setTimeout(() => {
+      setLoading(false);
+      if (email === 'student@gmail.com' && password === 'password') {
+        setLoggedIn(true);
+        toast.success('Welcome back, Student!');
+      } else if (email && password) {
+        toast.error('Incorrect email or password');
+      } else {
+        toast.error('Something went wrong. Please try again.');
+      }
+    }, 1000);
+  };
+
   return (
     <div style={containerStyle}>
       <div style={timeStyle}>
         {dateTime.toLocaleString()}
       </div>
       <h1 style={titleStyle}>Student Dashboard</h1>
-      <p style={descriptionStyle}>Track your shuttle and request pickups here.</p>
+      {!loggedIn ? (
+        <form onSubmit={handleLogin} style={{ maxWidth: 400, margin: '2rem auto', display: 'flex', flexDirection: 'column', gap: '1rem', background: '#f4f4f5', padding: '2rem', borderRadius: 12 }}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+            style={{ padding: '0.75rem', borderRadius: 6, border: '1px solid #ccc', fontSize: '1rem' }}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+            style={{ padding: '0.75rem', borderRadius: 6, border: '1px solid #ccc', fontSize: '1rem' }}
+          />
+          <button type="submit" disabled={loading} style={{ background: '#2563eb', color: '#fff', fontWeight: 600, padding: '0.75rem', borderRadius: 6, border: 'none', fontSize: '1rem', cursor: 'pointer' }}>
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
+        </form>
+      ) : (
+        <p style={descriptionStyle}>Track your shuttle and request pickups here.</p>
+      )}
+      <ToastContainer position="top-center" autoClose={2000} />
     </div>
   );
 }
