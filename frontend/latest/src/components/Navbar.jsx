@@ -1,182 +1,116 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ThemeToggle } from './ThemeToggle';
 import Logo from '../assets/logo/shuttle-tracker-logo.svg?react';
 
 function Navbar() {
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 'light';
-  });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  useEffect(() => {
-    document.body.classList.toggle('dark', theme === 'dark');
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  useEffect(() => {
-    // Prevent body scroll when mobile menu is open
-    if (isMenuOpen) {
-      document.body.classList.add('menu-open');
-    } else {
-      document.body.classList.remove('menu-open');
-    }
-
-    // Cleanup on unmount
-    return () => {
-      document.body.classList.remove('menu-open');
-    };
-  }, [isMenuOpen]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
-  };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-  };
-
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
-
-  const navLinkStyle = {
-    color: '#fff',
-    textDecoration: 'none',
-    padding: '0.5rem 1rem',
-    borderRadius: '6px',
-    transition: 'all 0.3s ease',
-    display: 'block',
-    ':hover': {
-      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    }
+    // Prevent scrolling when menu is open
+    document.body.classList.toggle('menu-open', !isMenuOpen);
   };
 
   return (
-    <nav style={{
-      backgroundColor: '#2563eb',
-      padding: '1rem 2rem',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-      position: 'sticky',
-      top: 0,
-      zIndex: 1000
-    }}>
-      {/* Logo on the left */}
-      <Link to="/" style={{ 
-        color: '#fff', 
-        fontSize: '1.5rem', 
-        fontWeight: 'bold',
-        textDecoration: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.5rem',
-      }}>
+    <nav className="bg-blue-600 dark:bg-gray-800 text-white p-4 px-8 flex justify-between items-center shadow-md sticky top-0 z-10 transition-colors duration-200">
+      <Link
+        to="/"
+        className="text-white text-xl font-bold no-underline flex items-center gap-2"
+      >
+      
         <Logo style={{ height: '2.2rem', width: 'auto', display: 'block' }} />
       </Link>
 
-      {/* Hamburger menu button on the right (mobile only) */}
-      <button 
+      {/* Mobile menu button */}
+      <button
+        className="mobile-menu-btn lg:hidden text-white p-2 focus:outline-none"
         onClick={toggleMenu}
-        style={{
-          background: 'none',
-          border: 'none',
-          color: '#fff',
-          fontSize: '1.5rem',
-          cursor: 'pointer',
-          padding: '0.5rem',
-          zIndex: 1001,
-          minWidth: '44px',
-          minHeight: '44px',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-        className="mobile-menu-btn"
-        aria-label="Toggle navigation menu"
+        aria-label="Toggle menu"
       >
-        {isMenuOpen ? '✕' : '☰'}
+        {isMenuOpen ? (
+          <span className="text-2xl">✕</span>
+        ) : (
+          <span className="text-2xl">☰</span>
+        )}
       </button>
 
       {/* Desktop navigation */}
-      <div style={{ 
-        display: 'flex', 
-        gap: '1.5rem',
-        alignItems: 'center',
-        height: '100%',
-        minWidth: 0,
-        whiteSpace: 'nowrap',
-      }} className="desktop-nav">
-        <Link to="/" style={{...navLinkStyle, margin: 0, paddingTop: 0, paddingBottom: 0, whiteSpace: 'nowrap'}} onClick={closeMenu}>Home</Link>
-        <Link to="/student" style={{...navLinkStyle, margin: 0, paddingTop: 0, paddingBottom: 0, whiteSpace: 'nowrap'}} onClick={closeMenu}>Student</Link>
-        <Link to="/driver" style={{...navLinkStyle, margin: 0, paddingTop: 0, paddingBottom: 0, whiteSpace: 'nowrap'}} onClick={closeMenu}>Driver</Link>
-        <Link to="/schedule" style={{...navLinkStyle, margin: 0, paddingTop: 0, paddingBottom: 0, whiteSpace: 'nowrap'}} onClick={closeMenu}>Schedule</Link>
-        <button 
-          onClick={toggleTheme} 
-          style={{ 
-            marginLeft: '1rem', 
-            background: 'none', 
-            color: '#fff', 
-            border: '1px solid #fff',
-            padding: '0.5rem 1rem',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            marginTop: 0,
-            marginBottom: 0,
-            height: 'auto',
-            alignSelf: 'center',
-            display: 'flex',
-            alignItems: 'center',
-            whiteSpace: 'nowrap',
-          }}
+      <div className="hidden lg:flex items-center gap-6">
+        <Link
+          to="/"
+          className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
         >
-          {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
-        </button>
+          Home
+        </Link>
+        <Link
+          to="/student"
+          className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+        >
+          Student
+        </Link>
+        <Link
+          to="/driver"
+          className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+        >
+          Driver
+        </Link>
+        <Link
+          to="/schedule"
+          className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+        >
+          Schedule
+        </Link>
+        <ThemeToggle />
       </div>
 
       {/* Mobile navigation overlay */}
-      <div 
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: '#2563eb',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: '2rem',
-          transform: isMenuOpen ? 'translateX(0)' : 'translateX(-100%)',
-          transition: 'transform 0.3s ease-in-out',
-          zIndex: 1000
-        }}
-        className="mobile-nav-overlay"
-      >
-        <Link to="/" style={{...navLinkStyle, fontSize: '1.2rem'}} onClick={closeMenu}>Home</Link>
-        <Link to="/student" style={{...navLinkStyle, fontSize: '1.2rem'}} onClick={closeMenu}>Student</Link>
-        <Link to="/driver" style={{...navLinkStyle, fontSize: '1.2rem'}} onClick={closeMenu}>Driver</Link>
-        <Link to="/schedule" style={{...navLinkStyle, fontSize: '1.2rem'}} onClick={closeMenu}>Schedule</Link>
-        <button 
-          onClick={toggleTheme} 
-          style={{ 
-            background: 'none', 
-            color: '#fff', 
-            border: '1px solid #fff',
-            padding: '0.75rem 1.5rem',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontSize: '1.1rem',
-            transition: 'all 0.3s ease'
-          }}
-        >
-          {theme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode'}
-        </button>
-      </div>
+      {isMenuOpen && (
+        <div className="fixed inset-0 bg-blue-800/95 dark:bg-gray-900/95 z-50 flex flex-col items-center justify-center mobile-nav-overlay">
+          <button
+            className="absolute top-4 right-8 text-white text-2xl"
+            onClick={toggleMenu}
+            aria-label="Close menu"
+          >
+            ✕
+          </button>
+          <div className="flex flex-col items-center gap-6 text-xl">
+            <Link
+              to="/"
+              className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+              onClick={toggleMenu}
+            >
+              Home
+            </Link>
+            <Link
+              to="/student"
+              className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+              onClick={toggleMenu}
+            >
+              Student
+            </Link>
+            <Link
+              to="/driver"
+              className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+              onClick={toggleMenu}
+            >
+              Driver
+            </Link>
+            <Link
+              to="/schedule"
+              className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+              onClick={toggleMenu}
+            >
+              Schedule
+            </Link>
+            <div className="mt-4">
+              <ThemeToggle />
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
 
-export default Navbar; 
+export default Navbar;
