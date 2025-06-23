@@ -7,6 +7,8 @@ import Student from './pages/Student';
 import Driver from './pages/Driver';
 import Schedule from './pages/Schedule';
 import Footer from './components/Footer';
+import StudentLogin from './pages/StudentLogin';
+import DriverLogin from './pages/DriverLogin';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
             <Route path="/student" element={<Student />} />
             <Route path="/driver" element={<Driver />} />
             <Route path="/schedule" element={<Schedule />} />
+            <Route path="/student-login" element={<StudentLogin />} />
+            <Route path="/driver-login" element={<DriverLogin />} />
           </Routes>
         </main>
         <Footer />
