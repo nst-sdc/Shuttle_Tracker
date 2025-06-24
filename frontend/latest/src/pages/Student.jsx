@@ -101,7 +101,7 @@ function Student() {
               />
             </div>
             
-            {/* Forgot password link positioned right after password field */}
+
             <div className="flex justify-end -mt-1 mb-1">
               <a 
                 type="button"
@@ -150,7 +150,6 @@ function Student() {
             </button>
           </form>
 
-          {/* Removing the original forgot password link at bottom */}
         </div>
       </div>
     );
