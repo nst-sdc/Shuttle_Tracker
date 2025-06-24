@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import BusCard from '../components/BusCard';
 
 function Student() {
   const [dateTime, setDateTime] = useState(new Date());
@@ -46,6 +47,7 @@ function Student() {
       </div>
       <h1 style={titleStyle}>Student Dashboard</h1>
       <p style={descriptionStyle}>Track your shuttle and request pickups here.</p>
+      <BusCard />
     </div>
   );
 }
