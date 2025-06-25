@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import BusCard from '../components/BusCard';
+import BusCard from '../components/BusCard';
 
 function Driver() {
   const [dateTime, setDateTime] = useState(new Date());
@@ -168,14 +168,10 @@ function Driver() {
       </div>
 
       <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white text-center mb-4">
-        Student Dashboard
+        Driver Dashboard
       </h1>
 
-      <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 text-center mb-8 leading-relaxed">
-        Track your shuttle and request pickups here.
-      </p>
-
-      {/* <BusCard /> */}
+      <BusCard />
     </div>
   );
 }

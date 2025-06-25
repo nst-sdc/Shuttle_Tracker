@@ -59,7 +59,7 @@ function Navbar() {
           to="/schedule"
           className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
         >
-          Schedule
+          Track Shuttle
         </Link>
         <ThemeToggle />
       </div>

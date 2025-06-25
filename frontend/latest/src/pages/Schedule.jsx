@@ -24,8 +24,8 @@ function Schedule() {
 
   return (
     <div style={containerStyle}>
-      <h1 style={titleStyle}>Shuttle Schedule</h1>
-      <p style={descriptionStyle}>View the complete shuttle schedule and timings.</p>
+      <h1 style={titleStyle}>Track Shuttle</h1>
+      {/* <p style={descriptionStyle}>Track your Shuttle here'</p> */}
     </div>
   );
 }
