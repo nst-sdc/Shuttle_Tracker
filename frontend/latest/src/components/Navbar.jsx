@@ -18,7 +18,6 @@ function Navbar() {
         to="/"
         className="text-white text-xl font-bold no-underline flex items-center gap-2"
       >
-      
         <Logo style={{ height: '2.2rem', width: 'auto', display: 'block' }} />
       </Link>
 
@@ -56,7 +55,7 @@ function Navbar() {
           Driver
         </Link>
         <Link
-          to="/schedule"
+          to="/track-shuttle"
           className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
         >
           Track Shuttle
@@ -97,11 +96,11 @@ function Navbar() {
               Driver
             </Link>
             <Link
-              to="/schedule"
+              to="/track-shuttle"
               className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
               onClick={toggleMenu}
             >
-              Schedule
+              Track Shuttle
             </Link>
             <div className="mt-4">
               <ThemeToggle />
