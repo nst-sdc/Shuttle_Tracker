@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import BusCard from '../components/BusCard';
+import toast, { Toaster } from 'react-hot-toast';
 
 function Student() {
   const [dateTime, setDateTime] = useState(new Date());
@@ -22,13 +23,44 @@ function Student() {
     // Simulate login
     setTimeout(() => {
       setIsLoading(false);
-      setIsLoggedIn(true);
+      // Simulate login logic
+      if (email === 'student@example.com' && password === 'password') {
+        toast.success('Welcome back, Student!', {
+          position: 'top-center',
+          style: { fontSize: '1.1rem', fontWeight: 'bold' },
+          duration: 1200,
+          iconTheme: { primary: '#22c55e', secondary: '#fff' },
+        });
+        setTimeout(() => setIsLoggedIn(true), 1200);
+      } else if (email && password) {
+        toast.error('Incorrect email or password', {
+          position: 'top-center',
+          style: { fontSize: '1.1rem', fontWeight: 'bold' },
+          duration: 2500,
+        });
+      } else {
+        toast.error('Something went wrong. Please try again.', {
+          position: 'top-center',
+          style: { fontSize: '1.1rem', fontWeight: 'bold' },
+          duration: 2500,
+        });
+      }
     }, 1000);
   };
 
   if (!isLoggedIn) {
     return (
       <div className="flex flex-col items-center justify-start w-full px-4 py-6 md:py-8 bg-white dark:bg-gray-900 min-h-[70vh]">
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            style: { fontSize: '1.1rem', fontWeight: 'bold' },
+            duration: 2500,
+            success: { iconTheme: { primary: '#22c55e', secondary: '#fff' } },
+            error: { iconTheme: { primary: '#ef4444', secondary: '#fff' } },
+            className: 'animate__animated animate__fadeInDown',
+          }}
+        />
         <div className="w-full max-w-md mx-auto">
           {/* Logo */}
           <div className="flex justify-center mb-4 md:mb-6">
