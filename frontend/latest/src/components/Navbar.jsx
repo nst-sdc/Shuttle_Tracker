@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
-import Logo from '../assets/logo/shuttle-tracker-logo.svg?react';
+import mainLogo from '../assets/logo/main-logo.png';
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-    // Prevent scrolling when menu is open
     document.body.classList.toggle('menu-open', !isMenuOpen);
   };
 
@@ -16,12 +15,17 @@ function Navbar() {
     <nav className="bg-blue-600 dark:bg-gray-800 text-white p-4 px-8 flex justify-between items-center shadow-md sticky top-0 z-10 transition-colors duration-200">
       <Link
         to="/"
-        className="text-white text-xl font-bold no-underline flex items-center gap-2"
+        className="logo-link no-underline flex items-center gap-2 focus:outline-none"
+        aria-label="Shuttle Tracker Home"
       >
-        <Logo style={{ height: '2.2rem', width: 'auto', display: 'block' }} />
+        <img 
+          src={mainLogo} 
+          alt="Shuttle Tracker Logo" 
+          className="h-9 scale-[3] md:scale-[4.8] origin-left object-contain block"
+        />
       </Link>
 
-      {/* Mobile menu button */}
+      {/* 📱 Mobile menu button */}
       <button
         className="mobile-menu-btn lg:hidden text-white p-2 focus:outline-none"
         onClick={toggleMenu}
@@ -34,7 +38,7 @@ function Navbar() {
         )}
       </button>
 
-      {/* Desktop navigation */}
+      {/* 💻 Desktop nav links */}
       <div className="hidden lg:flex items-center gap-6">
         <Link
           to="/"
@@ -63,7 +67,7 @@ function Navbar() {
         <ThemeToggle />
       </div>
 
-      {/* Mobile navigation overlay */}
+      {/* 📱 Mobile nav overlay */}
       {isMenuOpen && (
         <div className="fixed inset-0 bg-blue-800/95 dark:bg-gray-900/95 z-50 flex flex-col items-center justify-center mobile-nav-overlay">
           <button
