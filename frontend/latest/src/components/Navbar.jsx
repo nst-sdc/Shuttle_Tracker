@@ -12,7 +12,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-blue-600 dark:bg-gray-800 text-white p-4 px-8 flex justify-between items-center shadow-md sticky top-0 z-10 transition-colors duration-200">
+    <nav className="bg-blue-600 dark:bg-gray-800 text-white py-6 px-8 flex justify-between items-center shadow-md sticky top-0 z-10 transition-colors duration-200">
       <Link
         to="/"
         className="logo-link no-underline flex items-center gap-2 focus:outline-none"
@@ -21,7 +21,7 @@ function Navbar() {
         <img 
           src={mainLogo} 
           alt="Shuttle Tracker Logo" 
-          className="h-9 scale-[3] md:scale-[4.8] origin-left object-contain block"
+          className="h-14 scale-[2.2] md:scale-[1.8] origin-left object-contain block"
         />
       </Link>
 
