@@ -1,4 +1,4 @@
-<img width="900" alt="image" src="https://github.com/user-attachments/assets/f7b4adb8-10d2-4d69-a310-28a0ac91df8e" />
+<img width="900" alt="image" src="https://github.com/user-attachments/assets/f7b4adb8-10d2-4d69-a310-28a0ac91df8e"/>
 
 # 🚍 Driver Status & Location Tracking – Design Proposal
 
