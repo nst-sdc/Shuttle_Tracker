@@ -12,17 +12,17 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-blue-600 dark:bg-gray-800 text-white py-6 px-8 flex justify-between items-center shadow-md sticky top-0 z-10 transition-colors duration-200">
+    <nav className="bg-blue-600 dark:bg-gray-800 text-white py-4 px-8 flex justify-between items-center shadow-md sticky top-0 z-10 transition-colors duration-200">
       <Link
         to="/"
         className="logo-link no-underline flex items-center gap-2 focus:outline-none"
         aria-label="Shuttle Tracker Home"
       >
-        <img 
-          src={mainLogo} 
-          alt="Shuttle Tracker Logo" 
-          // Further adjusted classes for larger visibility
-          className="h-12 md:h-20 lg:h-24 max-w-[180px] sm:max-w-[240px] lg:max-w-[320px] object-contain"
+        <img
+          src={mainLogo}
+          alt="Shuttle Tracker Logo"
+          // Adjusted classes for smaller visibility
+          className="h-10 md:h-14 lg:h-16 max-w-[120px] sm:max-w-[180px] lg:max-w-[240px] object-contain"
         />
       </Link>
 
