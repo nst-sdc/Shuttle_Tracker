@@ -1,9 +1,10 @@
 const express = require('express');
 const Bus = require('../models/Bus');
+const { authenticate, authorize } = require('../middleware/auth');
 const router = express.Router();
 
-// Get all buses
-router.get('/', async (req, res) => {
+// Get all buses (students and drivers)
+router.get('/', authenticate, async (req, res) => {
   try {
     const buses = await Bus.find();
     res.json(buses);
@@ -12,8 +13,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Add a new bus
-router.post('/', async (req, res) => {
+// Add a new bus (drivers only)
+router.post('/', authenticate, authorize('driver'), async (req, res) => {
   try {
     const { busNumber, driverName, currentLocation, status } = req.body;
     const newBus = new Bus({ busNumber, driverName, currentLocation, status });
@@ -24,4 +25,4 @@ router.post('/', async (req, res) => {
   }
 });
 
-module.exports = router; 
+module.exports = router;

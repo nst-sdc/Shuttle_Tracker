@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import BusCard from '../components/BusCard';
 import toast, { Toaster } from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 
 function Driver() {
   const [dateTime, setDateTime] = useState(new Date());
@@ -8,6 +9,9 @@ function Driver() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [name, setName] = useState('');
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -15,6 +19,18 @@ function Driver() {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  // Handle Google OAuth redirect
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    if (token) {
+      login(token);
+      setIsLoggedIn(true);
+      // Remove token from URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [login]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -46,6 +62,29 @@ function Driver() {
         });
       }
     }, 1000);
+  };
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5001'}/api/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, role: 'driver', name }),
+      });
+      const data = await res.json();
+      setIsLoading(false);
+      if (res.ok) {
+        toast.success('Sign up successful! Logging you in...', { position: 'top-center', duration: 1500 });
+        setTimeout(() => setIsSignUp(false), 1500);
+      } else {
+        toast.error(data.error || 'Sign up failed', { position: 'top-center', duration: 2500 });
+      }
+    } catch (err) {
+      setIsLoading(false);
+      toast.error('Sign up failed', { position: 'top-center', duration: 2500 });
+    }
   };
 
   if (!isLoggedIn) {
@@ -186,7 +225,19 @@ function Driver() {
             </button>
           </form>
 
-          {/* Removing the original forgot password link at bottom */}
+          {/* Google Login Button */}
+          <div className="mt-4 flex flex-col items-center">
+            <button
+              type="button"
+              onClick={() => {
+                window.location.href = `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5001'}/api/auth/google?role=driver`;
+              }}
+              className="w-full flex items-center justify-center gap-2 py-2.5 md:py-3 px-4 bg-white border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-200 font-medium mt-2"
+            >
+              <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5 mr-2" />
+              Continue with Google
+            </button>
+          </div>
         </div>
       </div>
     );

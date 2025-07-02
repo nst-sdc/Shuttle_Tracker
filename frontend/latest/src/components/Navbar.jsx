@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 import mainLogo from '../assets/logo/main-logo.png';
+import { useAuth } from '../context/AuthContext';
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -46,18 +49,22 @@ function Navbar() {
         >
           Home
         </Link>
-        <Link
-          to="/student"
-          className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
-        >
-          Student
-        </Link>
-        <Link
-          to="/driver"
-          className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
-        >
-          Driver
-        </Link>
+        {(!user || user.role === 'student') && (
+          <Link
+            to="/student"
+            className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+          >
+            Student
+          </Link>
+        )}
+        {(!user || user.role === 'driver') && (
+          <Link
+            to="/driver"
+            className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+          >
+            Driver
+          </Link>
+        )}
         <Link
           to="/track-shuttle"
           className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
@@ -65,6 +72,14 @@ function Navbar() {
           Track Shuttle
         </Link>
         <ThemeToggle />
+        {user && (
+          <button
+            onClick={() => { logout(); navigate('/'); }}
+            className="ml-4 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+          >
+            Sign Out
+          </button>
+        )}
       </div>
 
       {/* 📱 Mobile nav overlay */}
@@ -85,20 +100,24 @@ function Navbar() {
             >
               Home
             </Link>
-            <Link
-              to="/student"
-              className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
-              onClick={toggleMenu}
-            >
-              Student
-            </Link>
-            <Link
-              to="/driver"
-              className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
-              onClick={toggleMenu}
-            >
-              Driver
-            </Link>
+            {(!user || user.role === 'student') && (
+              <Link
+                to="/student"
+                className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+                onClick={toggleMenu}
+              >
+                Student
+              </Link>
+            )}
+            {(!user || user.role === 'driver') && (
+              <Link
+                to="/driver"
+                className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+                onClick={toggleMenu}
+              >
+                Driver
+              </Link>
+            )}
             <Link
               to="/track-shuttle"
               className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
@@ -109,6 +128,14 @@ function Navbar() {
             <div className="mt-4">
               <ThemeToggle />
             </div>
+            {user && (
+              <button
+                onClick={() => { logout(); navigate('/'); toggleMenu(); }}
+                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+              >
+                Sign Out
+              </button>
+            )}
           </div>
         </div>
       )}
