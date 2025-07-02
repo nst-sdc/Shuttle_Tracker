@@ -12,13 +12,15 @@ function App() {
     <Router>
       <div className="flex flex-col min-h-screen w-full bg-white dark:bg-gray-900 transition-colors duration-200">
         <Navbar />
-        <main className="w-full p-8 box-border flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/student" element={<Student />} />
-            <Route path="/driver" element={<Driver />} />
-            <Route path="/track-shuttle" element={<TrackShuttle />} />
-          </Routes>
+        <main className="w-full flex-grow">
+          <div className="max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/student" element={<Student />} />
+              <Route path="/driver" element={<Driver />} />
+              <Route path="/track-shuttle" element={<TrackShuttle />} />
+            </Routes>
+          </div>
         </main>
         <Footer />
       </div>

@@ -21,7 +21,8 @@ function Navbar() {
         <img 
           src={mainLogo} 
           alt="Shuttle Tracker Logo" 
-          className="h-14 scale-[2.2] md:scale-[1.8] origin-left object-contain block"
+          // Further adjusted classes for larger visibility
+          className="h-12 md:h-20 lg:h-24 max-w-[180px] sm:max-w-[240px] lg:max-w-[320px] object-contain"
         />
       </Link>
 
