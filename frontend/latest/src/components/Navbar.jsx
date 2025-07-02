@@ -3,6 +3,12 @@ import { Link } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 import mainLogo from '../assets/logo/main-logo.png';
 
+/**
+ * Renders a responsive navigation bar with theme toggling and mobile menu support.
+ *
+ * Displays navigation links and a theme toggle for both desktop and mobile views. On smaller screens, provides a toggleable overlay menu for navigation. The navigation bar remains sticky at the top of the page and adapts its appearance based on the current theme.
+ * @returns {JSX.Element} The rendered navigation bar component.
+ */
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -21,7 +27,8 @@ function Navbar() {
         <img 
           src={mainLogo} 
           alt="Shuttle Tracker Logo" 
-          className="h-14 scale-[2.2] md:scale-[1.8] origin-left object-contain block"
+          // Further adjusted classes for larger visibility
+          className="h-12 md:h-20 lg:h-24 max-w-[180px] sm:max-w-[240px] lg:max-w-[320px] object-contain"
         />
       </Link>
 
