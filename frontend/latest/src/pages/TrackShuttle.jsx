@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import React, { useState, useEffect, useRef } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -12,7 +12,22 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
 });
 
-function TrackShuttle() {
+// Helper component to update map center on driver location change
+function MapUpdater({ driverLocation }) {
+  const map = useMap();
+  useEffect(() => {
+    if (driverLocation) {
+      map.flyTo(
+        [driverLocation.latitude, driverLocation.longitude],
+        map.getZoom(),
+        { animate: true }
+      );
+    }
+  }, [driverLocation, map]);
+  return null;
+}
+
+function TrackShuttle({ driverLocation }) {
   const [isPanelOpen, setIsPanelOpen] = useState(true);
 
   // Example shuttle data - replace with your actual data source
@@ -74,6 +89,13 @@ function TrackShuttle() {
     popupAnchor: [1, -34],
   });
 
+  const driverIcon = new L.Icon({
+    iconUrl: 'https://cdn-icons-png.flaticon.com/512/1946/1946429.png', // a different icon for driver
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32],
+  });
+
   const togglePanel = () => {
     setIsPanelOpen(!isPanelOpen);
   };
@@ -95,12 +117,17 @@ function TrackShuttle() {
       {/* Map container with fixed height */}
       <div className="w-full h-[calc(100vh-10rem)]">
         <MapContainer
-          center={mapCenter}
+          center={
+            driverLocation
+              ? [driverLocation.latitude, driverLocation.longitude]
+              : mapCenter
+          }
           zoom={zoom}
           className="h-full w-full rounded-md shadow-md"
           scrollWheelZoom={true}
           zoomControl={false}
         >
+          <MapUpdater driverLocation={driverLocation} />
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -117,7 +144,9 @@ function TrackShuttle() {
                   <span className="font-bold text-lg text-blue-700 block mb-1">
                     {shuttle.name}
                   </span>
-                  <span className="block text-sm font-medium">{shuttle.route}</span>
+                  <span className="block text-sm font-medium">
+                    {shuttle.route}
+                  </span>
                   <span className="block text-xs text-gray-500 mb-1">
                     Status: {shuttle.status}
                   </span>
@@ -128,6 +157,29 @@ function TrackShuttle() {
               </Popup>
             </Marker>
           ))}
+
+          {/* Driver marker */}
+          {driverLocation && (
+            <Marker
+              position={[driverLocation.latitude, driverLocation.longitude]}
+              icon={driverIcon}
+            >
+              <Popup>
+                <div className="text-center p-1">
+                  <span className="font-bold text-lg text-blue-700 block mb-1">
+                    You (Driver)
+                  </span>
+                  <span className="block text-xs text-gray-500 mb-1">
+                    Lat: {driverLocation.latitude.toFixed(6)}, Lng:{' '}
+                    {driverLocation.longitude.toFixed(6)}
+                  </span>
+                  <span className="text-xs text-gray-600 italic block">
+                    Updated: {new Date().toLocaleTimeString()}
+                  </span>
+                </div>
+              </Popup>
+            </Marker>
+          )}
         </MapContainer>
       </div>
 
@@ -163,7 +215,9 @@ function TrackShuttle() {
                   >
                     <div className="w-2.5 h-2.5 rounded-full bg-green-500 mr-2"></div>
                     <div>
-                      <span className="font-medium block text-sm">{shuttle.name}</span>
+                      <span className="font-medium block text-sm">
+                        {shuttle.name}
+                      </span>
                       <span className="text-xs text-gray-500 dark:text-gray-400">
                         {shuttle.route}
                       </span>
@@ -179,13 +233,16 @@ function TrackShuttle() {
               </h3>
               <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded text-xs">
                 <p className="mb-1">
-                  <span className="font-medium">Weekdays:</span> 7:00 AM - 10:00 PM
+                  <span className="font-medium">Weekdays:</span> 7:00 AM - 10:00
+                  PM
                 </p>
                 <p className="mb-1">
-                  <span className="font-medium">Weekends:</span> 9:00 AM - 8:00 PM
+                  <span className="font-medium">Weekends:</span> 9:00 AM - 8:00
+                  PM
                 </p>
                 <p>
-                  <span className="font-medium">Frequency:</span> Every 15 minutes
+                  <span className="font-medium">Frequency:</span> Every 15
+                  minutes
                 </p>
               </div>
             </div>
