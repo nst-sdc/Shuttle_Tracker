@@ -7,6 +7,7 @@ import Student from './pages/Student';
 import Driver from './pages/Driver';
 import TrackShuttle from './pages/TrackShuttle';
 import Footer from './components/Footer';
+import Profile from './pages/Profile';
 function App() {
   return (
     <Router>
@@ -19,6 +20,9 @@ function App() {
               <Route path="/student" element={<Student />} />
               <Route path="/driver" element={<Driver />} />
               <Route path="/track-shuttle" element={<TrackShuttle />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/map" element={<TrackShuttle />} />
+              <Route path="/profile" element={<Profile />} />
             </Routes>
           </div>
         </main>
