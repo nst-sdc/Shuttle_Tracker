@@ -21,7 +21,9 @@
     "react-hot-toast": "^2.5.2",
     "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.6.2",
-    "shadcn-ui": "^0.9.5"
+    "shadcn-ui": "^0.9.5",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

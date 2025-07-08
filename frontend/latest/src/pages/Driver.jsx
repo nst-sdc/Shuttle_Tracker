@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import BusCard from '../components/BusCard';
 import toast, { Toaster } from 'react-hot-toast';
+import TrackShuttle from './TrackShuttle';
 
 function Driver() {
   const [dateTime, setDateTime] = useState(new Date());
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showForm, setShowForm] = useState(true); // show form first
+  const [showLogin, setShowLogin] = useState(false); // then login
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // then buscard
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [driverName, setDriverName] = useState('');
+  const [busNo, setBusNo] = useState('');
+  const [mobileNo, setMobileNo] = useState('');
+  const [location, setLocation] = useState('Campus');
+  const [driverLocation, setDriverLocation] = useState(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -16,14 +24,33 @@ function Driver() {
     return () => clearInterval(timer);
   }, []);
 
+  // Form submit handler
+  const handleDetailsSubmit = (e) => {
+    e.preventDefault();
+    if (!driverName || !busNo || !mobileNo || !location) {
+      toast.error('Please fill all the details.', {
+        position: 'top-center',
+        style: { fontSize: '1.1rem', fontWeight: 'bold' },
+        duration: 2000,
+      });
+      return;
+    }
+    setShowForm(false);
+    setShowLogin(true);
+    toast.success('Details saved! Please login.', {
+      position: 'top-center',
+      style: { fontSize: '1.1rem', fontWeight: 'bold' },
+      duration: 1200,
+      iconTheme: { primary: '#22c55e', secondary: '#fff' },
+    });
+  };
+
+  // Login handler
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
-    // Simulate login
     setTimeout(() => {
       setIsLoading(false);
-      // Simulate login logic
       if (email === 'driver@example.com' && password === 'password') {
         toast.success('Driver logged in successfully', {
           position: 'top-center',
@@ -31,7 +58,10 @@ function Driver() {
           duration: 1200,
           iconTheme: { primary: '#22c55e', secondary: '#fff' },
         });
-        setTimeout(() => setIsLoggedIn(true), 1200);
+        setTimeout(() => {
+          setShowLogin(false);
+          setIsLoggedIn(true);
+        }, 1200);
       } else if (email && password) {
         toast.error('Incorrect email or password', {
           position: 'top-center',
@@ -48,7 +78,83 @@ function Driver() {
     }, 1000);
   };
 
-  if (!isLoggedIn) {
+  if (showForm) {
+    return (
+      <div className="flex flex-col items-center justify-center w-full px-4 py-6 md:py-8 bg-white dark:bg-gray-900 min-h-[70vh]">
+        <Toaster />
+        <div className="w-full max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+          <h2 className="text-2xl font-bold text-center mb-4 text-gray-900 dark:text-white">
+            Driver Details
+          </h2>
+          <form onSubmit={handleDetailsSubmit} className="space-y-4">
+            <div>
+              <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+                Driver Name
+              </label>
+              <input
+                type="text"
+                value={driverName}
+                onChange={(e) => setDriverName(e.target.value)}
+                required
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your name"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+                Bus Number
+              </label>
+              <input
+                type="text"
+                value={busNo}
+                onChange={(e) => setBusNo(e.target.value)}
+                required
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter bus number"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+                Mobile Number
+              </label>
+              <input
+                type="tel"
+                value={mobileNo}
+                onChange={(e) => setMobileNo(e.target.value)}
+                required
+                pattern="[0-9]{10}"
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter mobile number"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+                Location
+              </label>
+              <select
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                required
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="Campus">Campus</option>
+                <option value="Hostel">Hostel</option>
+                <option value="On the Way">On the Way</option>
+              </select>
+            </div>
+            <button
+              type="submit"
+              className="w-full py-2.5 px-4 text-white font-medium rounded-lg bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors"
+            >
+              Next: Login
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  if (showLogin) {
     return (
       <div className="flex flex-col items-center justify-start w-full px-4 py-6 md:py-8 bg-white dark:bg-gray-900 min-h-[70vh]">
         <Toaster
@@ -185,27 +291,38 @@ function Driver() {
               )}
             </button>
           </form>
-
-          {/* Removing the original forgot password link at bottom */}
         </div>
       </div>
     );
   }
 
-  // Dashboard after login
-  return (
-    <div className="px-4 py-6 sm:p-8 max-w-3xl mx-auto">
-      <div className="text-sm sm:text-base text-center font-bold text-gray-600 dark:text-gray-300 mb-4">
-        {dateTime.toLocaleString()}
+  if (isLoggedIn) {
+    return (
+      <div className="px-4 py-6 sm:p-8 max-w-3xl mx-auto">
+        <div className="text-sm sm:text-base text-center font-bold text-gray-600 dark:text-gray-300 mb-4">
+          {dateTime.toLocaleString()}
+        </div>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white text-center mb-4">
+          Driver Dashboard
+        </h1>
+        <BusCard
+          driverName={driverName}
+          busNo={busNo}
+          mobileNo={mobileNo}
+          location={location}
+          onLocationUpdate={setDriverLocation}
+        />
+        {/* Show map only when route started (driverLocation available) */}
+        {driverLocation && (
+          <div className="mt-8">
+            <TrackShuttle driverLocation={driverLocation} />
+          </div>
+        )}
       </div>
+    );
+  }
 
-      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white text-center mb-4">
-        Driver Dashboard
-      </h1>
-
-      <BusCard />
-    </div>
-  );
+  return null;
 }
 
 export default Driver;
