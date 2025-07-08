@@ -115,7 +115,7 @@ function TrackShuttle({ driverLocation }) {
       </div>
 
       {/* Map container with fixed height */}
-      <div className="w-full h-[calc(100vh-10rem)]">
+      <div className="w-full h-[calc(100vh-10rem)] pb-16">
         <MapContainer
           center={
             driverLocation
