@@ -36,15 +36,9 @@ function Student() {
       <div className="text-sm sm:text-base text-center font-bold text-gray-600 dark:text-gray-300 mb-4">
         {dateTime.toLocaleString()}
       </div>
-
       <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white text-center mb-4">
         Student Dashboard
       </h1>
-
-      <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 text-center mb-8 leading-relaxed">
-        Track your shuttle and request pickups here.
-      </p>
-
       {loading ? (
         <div className="text-center text-lg text-gray-500 dark:text-gray-400">
           Loading bus info...
