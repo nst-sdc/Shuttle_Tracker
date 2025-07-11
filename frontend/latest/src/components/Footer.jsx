@@ -8,20 +8,20 @@ function Footer() {
       <div className="flex justify-around items-center py-3">
         {/* Home */}
         <Link to="/" className="flex flex-col items-center text-sm hover:opacity-80">
-          <Home size={24} />
-          <span>Home</span>
+          <Home size={24} className='text-white' />
+          <span className='text-white'>Home</span>
         </Link>
 
         {/* Track Shuttle */}
         <Link to="/track-shuttle" className="flex flex-col items-center text-sm hover:opacity-80">
-          <MapPin size={24} />
-          <span>Track&nbsp;Shuttle</span>
+          <MapPin size={24} className='text-white'/>
+          <span className='text-white'>Track&nbsp;Shuttle</span>
         </Link>
 
         {/* Profile */}
         <Link to="/driver" className="flex flex-col items-center text-sm hover:opacity-80">
-          <User size={24} />
-          <span>Profile</span>
+          <User size={24} className='text-white' />
+          <span className='text-white'>Profile</span>
         </Link>
       </div>
     </footer>
