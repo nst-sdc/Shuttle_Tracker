@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import socket from '../socket';
 
 const BusCard = ({
   driverName,
@@ -6,6 +7,7 @@ const BusCard = ({
   mobileNo,
   location,
   onLocationUpdate,
+  isDriver = false,
 }) => {
   const busNumber = busNo || 'MH-12-AB-1234';
   const name = driverName || 'Rajesh Kumar';
@@ -16,7 +18,6 @@ const BusCard = ({
   const direction = 'To College';
 
   const [routeStarted, setRouteStarted] = useState(false);
-  const [currentCoords, setCurrentCoords] = useState(null);
   const watchIdRef = useRef(null);
 
   const handleStartRoute = () => {
@@ -25,8 +26,10 @@ const BusCard = ({
       watchIdRef.current = navigator.geolocation.watchPosition(
         (pos) => {
           const { latitude, longitude } = pos.coords;
-          setCurrentCoords({ latitude, longitude });
           if (onLocationUpdate) onLocationUpdate({ latitude, longitude });
+          if (isDriver) {
+            socket.emit('send-location', { latitude, longitude });
+          }
           console.log('Driver location:', latitude, longitude);
         },
         (err) => {
@@ -45,7 +48,6 @@ const BusCard = ({
       navigator.geolocation.clearWatch(watchIdRef.current);
       watchIdRef.current = null;
     }
-    setCurrentCoords(null);
     if (onLocationUpdate) onLocationUpdate(null);
   };
 

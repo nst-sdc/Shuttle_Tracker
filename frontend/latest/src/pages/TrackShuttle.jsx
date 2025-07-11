@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import socket from '../socket';
 
 // Fix for default marker icons in react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -27,8 +28,9 @@ function MapUpdater({ driverLocation }) {
   return null;
 }
 
-function TrackShuttle({ driverLocation }) {
+function TrackShuttle() {
   const [isPanelOpen, setIsPanelOpen] = useState(true);
+  const [driverLocations, setDriverLocations] = useState([]);
 
   // Example shuttle data - replace with your actual data source
   const [shuttlePositions, setShuttlePositions] = useState([
@@ -81,6 +83,22 @@ function TrackShuttle({ driverLocation }) {
     return () => clearInterval(interval);
   }, []);
 
+  // Listen for All Driver Locations
+  useEffect(() => {
+    function handleAllLocations(locations) {
+      setDriverLocations(locations);
+    }
+    socket.on('all-driver-locations', handleAllLocations);
+    return () => {
+      socket.off('all-driver-locations', handleAllLocations);
+    };
+  }, []);
+
+  // Log updated driver locations every time they change
+  useEffect(() => {
+    console.log('All driver locations:', driverLocations);
+  }, [driverLocations]);
+
   // Custom shuttle icons could be added here
   const shuttleIcon = new L.Icon({
     iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
@@ -90,7 +108,7 @@ function TrackShuttle({ driverLocation }) {
   });
 
   const driverIcon = new L.Icon({
-    iconUrl: 'https://cdn-icons-png.flaticon.com/512/1946/1946429.png', // a different icon for driver
+    iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png', // a different icon for driver
     iconSize: [32, 32],
     iconAnchor: [16, 32],
     popupAnchor: [0, -32],
@@ -115,11 +133,11 @@ function TrackShuttle({ driverLocation }) {
       </div>
 
       {/* Map container with fixed height */}
-      <div className="w-full h-[calc(100vh-10rem)]">
+      <div className="w-full h-[calc(100vh-10rem)] pb-16">
         <MapContainer
           center={
-            driverLocation
-              ? [driverLocation.latitude, driverLocation.longitude]
+            driverLocations.length > 0
+              ? [driverLocations[0].latitude, driverLocations[0].longitude]
               : mapCenter
           }
           zoom={zoom}
@@ -127,7 +145,7 @@ function TrackShuttle({ driverLocation }) {
           scrollWheelZoom={true}
           zoomControl={false}
         >
-          <MapUpdater driverLocation={driverLocation} />
+          <MapUpdater driverLocation={driverLocations[0]} />
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -159,19 +177,20 @@ function TrackShuttle({ driverLocation }) {
           ))}
 
           {/* Driver marker */}
-          {driverLocation && (
+          {driverLocations.map((driver) => (
             <Marker
-              position={[driverLocation.latitude, driverLocation.longitude]}
+              key={driver.id}
+              position={[driver.latitude, driver.longitude]}
               icon={driverIcon}
             >
               <Popup>
                 <div className="text-center p-1">
                   <span className="font-bold text-lg text-blue-700 block mb-1">
-                    You (Driver)
+                    Driver
                   </span>
                   <span className="block text-xs text-gray-500 mb-1">
-                    Lat: {driverLocation.latitude.toFixed(6)}, Lng:{' '}
-                    {driverLocation.longitude.toFixed(6)}
+                    Lat: {driver.latitude.toFixed(6)}, Lng:{' '}
+                    {driver.longitude.toFixed(6)}
                   </span>
                   <span className="text-xs text-gray-600 italic block">
                     Updated: {new Date().toLocaleTimeString()}
@@ -179,7 +198,7 @@ function TrackShuttle({ driverLocation }) {
                 </div>
               </Popup>
             </Marker>
-          )}
+          ))}
         </MapContainer>
       </div>
 

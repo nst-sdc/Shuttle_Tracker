@@ -311,6 +311,7 @@ function Driver() {
           mobileNo={mobileNo}
           location={location}
           onLocationUpdate={setDriverLocation}
+          isDriver={true}
         />
         {/* Show map only when route started (driverLocation available) */}
         {driverLocation && (
