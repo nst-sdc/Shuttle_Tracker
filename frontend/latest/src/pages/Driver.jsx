@@ -315,7 +315,7 @@ function Driver() {
         />
         {/* Show map only when route started (driverLocation available) */}
         {driverLocation && (
-          <div className="mt-8">
+          <div className="mt-8 pb-24"> {/* Add pb-24 to prevent overlap with fixed footer */}
             <TrackShuttle driverLocation={driverLocation} />
           </div>
         )}
