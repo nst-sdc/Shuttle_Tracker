@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 import mainLogo from '../assets/logo/main-logo.png';
 
-function Navbar() {
+function Navbar({ userType }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -21,12 +21,9 @@ function Navbar() {
         <img
           src={mainLogo}
           alt="Shuttle Tracker Logo"
-          // Adjusted classes for smaller visibility
           className="h-10 md:h-14 lg:h-16 max-w-[120px] sm:max-w-[180px] lg:max-w-[240px] object-contain"
         />
       </Link>
-
-      {/* 📱 Mobile menu button */}
       <button
         className="mobile-menu-btn lg:hidden text-white p-2 focus:outline-none"
         onClick={toggleMenu}
@@ -38,8 +35,6 @@ function Navbar() {
           <span className="text-2xl">☰</span>
         )}
       </button>
-
-      {/* 💻 Desktop nav links */}
       <div className="hidden lg:flex items-center gap-6">
         <Link
           to="/"
@@ -47,18 +42,22 @@ function Navbar() {
         >
           Home
         </Link>
-        <Link
-          to="/student"
-          className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
-        >
-          Student
-        </Link>
-        <Link
-          to="/driver"
-          className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
-        >
-          Driver
-        </Link>
+        {userType !== 'driver' && (
+          <Link
+            to="/student"
+            className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+          >
+            Student
+          </Link>
+        )}
+        {userType !== 'student' && (
+          <Link
+            to="/driver"
+            className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+          >
+            Driver
+          </Link>
+        )}
         <Link
           to="/track-shuttle"
           className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
@@ -67,8 +66,6 @@ function Navbar() {
         </Link>
         <ThemeToggle />
       </div>
-
-      {/* 📱 Mobile nav overlay */}
       {isMenuOpen && (
         <div className="fixed inset-0 bg-blue-800/95 dark:bg-gray-900/95 z-50 flex flex-col items-center justify-center mobile-nav-overlay">
           <button
@@ -86,20 +83,24 @@ function Navbar() {
             >
               Home
             </Link>
-            <Link
-              to="/student"
-              className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
-              onClick={toggleMenu}
-            >
-              Student
-            </Link>
-            <Link
-              to="/driver"
-              className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
-              onClick={toggleMenu}
-            >
-              Driver
-            </Link>
+            {userType !== 'driver' && (
+              <Link
+                to="/student"
+                className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+                onClick={toggleMenu}
+              >
+                Student
+              </Link>
+            )}
+            {userType !== 'student' && (
+              <Link
+                to="/driver"
+                className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+                onClick={toggleMenu}
+              >
+                Driver
+              </Link>
+            )}
             <Link
               to="/track-shuttle"
               className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"

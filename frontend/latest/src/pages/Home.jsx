@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Home() {
+function Home({ userType, setUserType }) {
   const navigate = useNavigate();
   
   const containerStyle = {
@@ -53,34 +53,44 @@ function Home() {
         Track the NST college shuttle in real-time and request hassle-free pickups.
       </p>
       <div style={buttonContainerStyle}>
-        <button 
-          onClick={() => navigate('/student')} 
-          style={buttonStyle}
-          onMouseEnter={(e) => {
-            e.target.style.backgroundColor = '#1d4ed8';
-            e.target.style.transform = 'translateY(-2px)';
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.backgroundColor = '#2563eb';
-            e.target.style.transform = 'translateY(0)';
-          }}
-        >
-          I am a Student
-        </button>
-        <button 
-          onClick={() => navigate('/driver')} 
-          style={buttonStyle}
-          onMouseEnter={(e) => {
-            e.target.style.backgroundColor = '#1d4ed8';
-            e.target.style.transform = 'translateY(-2px)';
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.backgroundColor = '#2563eb';
-            e.target.style.transform = 'translateY(0)';
-          }}
-        >
-          I am a Driver
-        </button>
+        {(!userType || userType === 'student') && (
+          <button 
+            onClick={() => {
+              setUserType('student');
+              navigate('/student');
+            }} 
+            style={buttonStyle}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = '#1d4ed8';
+              e.target.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = '#2563eb';
+              e.target.style.transform = 'translateY(0)';
+            }}
+          >
+            I am a Student
+          </button>
+        )}
+        {(!userType || userType === 'driver') && (
+          <button 
+            onClick={() => {
+              setUserType('driver');
+              navigate('/driver');
+            }} 
+            style={buttonStyle}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = '#1d4ed8';
+              e.target.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = '#2563eb';
+              e.target.style.transform = 'translateY(0)';
+            }}
+          >
+            I am a Driver
+          </button>
+        )}
       </div>
     </div>
   );

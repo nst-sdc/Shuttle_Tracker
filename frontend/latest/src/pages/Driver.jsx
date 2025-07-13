@@ -27,7 +27,7 @@ function Driver() {
   // Form submit handler
   const handleDetailsSubmit = (e) => {
     e.preventDefault();
-    if (!driverName || !busNo || !mobileNo || !location) {
+    if (!driverName || !busNo || !mobileNo || !location || !email || !password) {
       toast.error('Please fill all the details.', {
         position: 'top-center',
         style: { fontSize: '1.1rem', fontWeight: 'bold' },
@@ -141,6 +141,34 @@ function Driver() {
                 <option value="Hostel">Hostel</option>
                 <option value="On the Way">On the Way</option>
               </select>
+            </div>
+            <div>
+              <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+                Email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your email address"
+                autoComplete="email"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+                Set Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                placeholder="Create a password"
+                autoComplete="new-password"
+              />
             </div>
             <button
               type="submit"
