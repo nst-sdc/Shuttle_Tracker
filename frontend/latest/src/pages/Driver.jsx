@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import BusCard from '../components/BusCard';
 import toast, { Toaster } from 'react-hot-toast';
 import TrackShuttle from './TrackShuttle';
+import { GoogleLogin } from '@react-oauth/google';
+
+const BACKEND_URL = 'https://shuttle-tracker.onrender.com'; // Change if your backend runs elsewhere
 
 function Driver() {
   const [dateTime, setDateTime] = useState(new Date());
@@ -24,6 +27,31 @@ function Driver() {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    // Check for JWT in localStorage on mount
+    const token = localStorage.getItem('jwt_token');
+    const user = localStorage.getItem('driver_user');
+    const details = localStorage.getItem('driver_details');
+    console.log('Checking localStorage:', { token: !!token, user: !!user });
+    if (token && user) {
+      const userData = JSON.parse(user);
+      setEmail(userData.email);
+      // Skip both form and login, go directly to dashboard
+      setShowForm(false);
+      setShowLogin(false);
+      setIsLoggedIn(true);
+      // Restore driver details
+      if (details) {
+        const { driverName, busNo, mobileNo, location } = JSON.parse(details);
+        setDriverName(driverName);
+        setBusNo(busNo);
+        setMobileNo(mobileNo);
+        setLocation(location);
+      }
+      console.log('User restored from localStorage:', userData.email);
+    }
+  }, []);
+
   // Form submit handler
   const handleDetailsSubmit = (e) => {
     e.preventDefault();
@@ -35,6 +63,16 @@ function Driver() {
       });
       return;
     }
+    // Save details to localStorage
+    localStorage.setItem(
+      'driver_details',
+      JSON.stringify({
+        driverName,
+        busNo,
+        mobileNo,
+        location,
+      })
+    );
     setShowForm(false);
     setShowLogin(true);
     toast.success('Details saved! Please login.', {
@@ -76,6 +114,59 @@ function Driver() {
         });
       }
     }, 1000);
+  };
+
+  // Google login handler (calls backend)
+  const handleGoogleLogin = async (credentialResponse) => {
+    setIsLoading(true);
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/auth/google`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential: credentialResponse.credential }),
+        credentials: 'include', // send cookies if backend uses them
+      });
+      const data = await res.json();
+      if (res.ok && data.token && data.user) {
+        console.log('Google login successful:', data.user);
+        localStorage.setItem('jwt_token', data.token);
+        localStorage.setItem('driver_user', JSON.stringify(data.user));
+        setEmail(data.user.email);
+        toast.success('Google login successful', {
+          position: 'top-center',
+          style: { fontSize: '1.1rem', fontWeight: 'bold' },
+          duration: 1200,
+          iconTheme: { primary: '#22c55e', secondary: '#fff' },
+        });
+        setTimeout(() => {
+          setShowLogin(false);
+          setIsLoggedIn(true);
+        }, 1200);
+      } else {
+        toast.error(data.error || 'Google login failed', {
+          position: 'top-center',
+          style: { fontSize: '1.1rem', fontWeight: 'bold' },
+          duration: 2500,
+        });
+      }
+    } catch {
+      toast.error('Google login failed. Please try again.', {
+        position: 'top-center',
+        style: { fontSize: '1.1rem', fontWeight: 'bold' },
+        duration: 2500,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem('jwt_token');
+    localStorage.removeItem('driver_user');
+    localStorage.removeItem('driver_details'); // Clear driver details on logout
+    setIsLoggedIn(false);
+    setShowLogin(true);
   };
 
   if (showForm) {
@@ -290,6 +381,38 @@ function Driver() {
                 'Login'
               )}
             </button>
+
+            {/* Divider */}
+            <div className="relative my-4">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+
+            {/* Google Login Button */}
+            <div className="w-full">
+              <GoogleLogin
+                onSuccess={handleGoogleLogin}
+                onError={() => {
+                  toast.error('Google login failed', {
+                    position: 'top-center',
+                    style: { fontSize: '1.1rem', fontWeight: 'bold' },
+                    duration: 2500,
+                  });
+                }}
+                useOneTap
+                theme="outline"
+                size="large"
+                text="continue_with"
+                shape="rectangular"
+                width="100%"
+              />
+            </div>
           </form>
         </div>
       </div>
@@ -305,6 +428,12 @@ function Driver() {
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white text-center mb-4">
           Driver Dashboard
         </h1>
+        <button
+          onClick={handleLogout}
+          className="mb-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+        >
+          Logout
+        </button>
         <BusCard
           driverName={driverName}
           busNo={busNo}
@@ -315,7 +444,9 @@ function Driver() {
         />
         {/* Show map only when route started (driverLocation available) */}
         {driverLocation && (
-          <div className="mt-8 pb-24"> {/* Add pb-24 to prevent overlap with fixed footer */}
+          <div className="mt-8 pb-24">
+            {' '}
+            {/* Add pb-24 to prevent overlap with fixed footer */}
             <TrackShuttle driverLocation={driverLocation} />
           </div>
         )}
