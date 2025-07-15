@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 import mainLogo from '../assets/logo/main-logo.png';
 
-function Navbar() {
+function Navbar({ userType }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -47,18 +47,22 @@ function Navbar() {
         >
           Home
         </Link>
-        <Link
-          to="/student"
-          className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
-        >
-          Student
-        </Link>
-        <Link
-          to="/driver"
-          className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
-        >
-          Driver
-        </Link>
+        {userType !== 'driver' && (
+          <Link
+            to="/student"
+            className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+          >
+            Student
+          </Link>
+        )}
+        {userType !== 'student' && (
+          <Link
+            to="/driver"
+            className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
+          >
+            Driver
+          </Link>
+        )}
         <Link
           to="/track-shuttle"
           className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"

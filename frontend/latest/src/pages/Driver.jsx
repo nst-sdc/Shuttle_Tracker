@@ -6,7 +6,7 @@ import { GoogleLogin } from '@react-oauth/google';
 
 const BACKEND_URL = 'https://shuttle-tracker.onrender.com'; // Change if your backend runs elsewhere
 
-function Driver() {
+function Driver({ setUserType }) {
   const [dateTime, setDateTime] = useState(new Date());
   const [showForm, setShowForm] = useState(true); // show form first
   const [showLogin, setShowLogin] = useState(false); // then login
@@ -40,6 +40,7 @@ function Driver() {
       setShowForm(false);
       setShowLogin(false);
       setIsLoggedIn(true);
+      if (setUserType) setUserType('driver');
       // Restore driver details
       if (details) {
         const { driverName, busNo, mobileNo, location } = JSON.parse(details);
@@ -50,7 +51,7 @@ function Driver() {
       }
       console.log('User restored from localStorage:', userData.email);
     }
-  }, []);
+  }, [setUserType]);
 
   // Form submit handler
   const handleDetailsSubmit = (e) => {
@@ -99,6 +100,7 @@ function Driver() {
         setTimeout(() => {
           setShowLogin(false);
           setIsLoggedIn(true);
+          if (setUserType) setUserType('driver');
         }, 1200);
       } else if (email && password) {
         toast.error('Incorrect email or password', {
@@ -141,6 +143,7 @@ function Driver() {
         setTimeout(() => {
           setShowLogin(false);
           setIsLoggedIn(true);
+          if (setUserType) setUserType('driver');
         }, 1200);
       } else {
         toast.error(data.error || 'Google login failed', {
@@ -167,6 +170,7 @@ function Driver() {
     localStorage.removeItem('driver_details'); // Clear driver details on logout
     setIsLoggedIn(false);
     setShowLogin(true);
+    if (setUserType) setUserType(null);
   };
 
   if (showForm) {

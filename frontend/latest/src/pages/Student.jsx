@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import BusCard from '../components/BusCard';
+import { useNavigate } from 'react-router-dom';
 
-function Student() {
+function Student({ setUserType }) {
   const [dateTime, setDateTime] = useState(new Date());
   const [busInfo, setBusInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -31,6 +33,11 @@ function Student() {
       });
   }, []);
 
+  const handleLogout = () => {
+    if (setUserType) setUserType(null);
+    navigate('/');
+  };
+
   return (
     <div className="px-4 py-6 sm:p-8 max-w-3xl mx-auto">
       <div className="text-sm sm:text-base text-center font-bold text-gray-600 dark:text-gray-300 mb-4">
@@ -39,6 +46,14 @@ function Student() {
       <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white text-center mb-4">
         Student Dashboard
       </h1>
+      <div className="flex justify-center mb-4">
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+        >
+          Logout
+        </button>
+      </div>
       {loading ? (
         <div className="text-center text-lg text-gray-500 dark:text-gray-400">
           Loading bus info...
