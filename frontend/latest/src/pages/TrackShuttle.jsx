@@ -119,7 +119,7 @@ function TrackShuttle() {
   };
 
   return (
-    <div className="h-screen w-full flex flex-col relative bg-gray-100 dark:bg-gray-900">
+    <div className="min-h-screen w-full flex flex-col relative bg-gray-100 dark:bg-gray-900">
       {/* Header with gradient background - smaller height */}
       <div className="w-full bg-gradient-to-r from-blue-900/90 to-blue-700/90 text-white p-3 shadow-lg">
         <div className="container mx-auto">
@@ -132,81 +132,85 @@ function TrackShuttle() {
         </div>
       </div>
 
-      {/* Map container with fixed height */}
-      <div className="w-full h-[calc(100vh-10rem)] pb-16">
-        <MapContainer
-          center={
-            driverLocations.length > 0
-              ? [driverLocations[0].latitude, driverLocations[0].longitude]
-              : mapCenter
-          }
-          zoom={zoom}
-          className="h-full w-full rounded-md shadow-md"
-          scrollWheelZoom={true}
-          zoomControl={false}
+      {/* Responsive Map Card Container */}
+      <div className="flex-1 flex flex-col items-center px-2 sm:px-4 md:px-8 min-h-0">
+        <div
+          className="w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden flex-1 flex flex-col min-h-0"
         >
-          <MapUpdater driverLocation={driverLocations[0]} />
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
+          <MapContainer
+            center={
+              driverLocations.length > 0
+                ? [driverLocations[0].latitude, driverLocations[0].longitude]
+                : mapCenter
+            }
+            zoom={zoom}
+            className="h-full w-full z-0 flex-1"
+            scrollWheelZoom={true}
+            zoomControl={false}
+          >
+            <MapUpdater driverLocation={driverLocations[0]} />
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
 
-          {shuttlePositions.map((shuttle) => (
-            <Marker
-              key={shuttle.id}
-              position={shuttle.position}
-              icon={shuttleIcon}
-            >
-              <Popup className="shuttle-popup">
-                <div className="text-center p-1">
-                  <span className="font-bold text-lg text-blue-700 block mb-1">
-                    {shuttle.name}
-                  </span>
-                  <span className="block text-sm font-medium">
-                    {shuttle.route}
-                  </span>
-                  <span className="block text-xs text-gray-500 mb-1">
-                    Status: {shuttle.status}
-                  </span>
-                  <span className="text-xs text-gray-600 italic block">
-                    Updated: {new Date().toLocaleTimeString()}
-                  </span>
-                </div>
-              </Popup>
-            </Marker>
-          ))}
+            {shuttlePositions.map((shuttle) => (
+              <Marker
+                key={shuttle.id}
+                position={shuttle.position}
+                icon={shuttleIcon}
+              >
+                <Popup className="shuttle-popup">
+                  <div className="text-center p-1">
+                    <span className="font-bold text-lg text-blue-700 block mb-1">
+                      {shuttle.name}
+                    </span>
+                    <span className="block text-sm font-medium">
+                      {shuttle.route}
+                    </span>
+                    <span className="block text-xs text-gray-500 mb-1">
+                      Status: {shuttle.status}
+                    </span>
+                    <span className="text-xs text-gray-600 italic block">
+                      Updated: {new Date().toLocaleTimeString()}
+                    </span>
+                  </div>
+                </Popup>
+              </Marker>
+            ))}
 
-          {/* Driver marker */}
-          {driverLocations.map((driver) => (
-            <Marker
-              key={driver.id}
-              position={[driver.latitude, driver.longitude]}
-              icon={driverIcon}
-            >
-              <Popup>
-                <div className="text-center p-1">
-                  <span className="font-bold text-lg text-blue-700 block mb-1">
-                    Driver
-                  </span>
-                  <span className="block text-xs text-gray-500 mb-1">
-                    Lat: {driver.latitude.toFixed(6)}, Lng:{' '}
-                    {driver.longitude.toFixed(6)}
-                  </span>
-                  <span className="text-xs text-gray-600 italic block">
-                    Updated: {new Date().toLocaleTimeString()}
-                  </span>
-                </div>
-              </Popup>
-            </Marker>
-          ))}
-        </MapContainer>
+            {/* Driver marker */}
+            {driverLocations.map((driver) => (
+              <Marker
+                key={driver.id}
+                position={[driver.latitude, driver.longitude]}
+                icon={driverIcon}
+              >
+                <Popup>
+                  <div className="text-center p-1">
+                    <span className="font-bold text-lg text-blue-700 block mb-1">
+                      Driver
+                    </span>
+                    <span className="block text-xs text-gray-500 mb-1">
+                      Lat: {driver.latitude.toFixed(6)}, Lng:{' '}
+                      {driver.longitude.toFixed(6)}
+                    </span>
+                    <span className="text-xs text-gray-600 italic block">
+                      Updated: {new Date().toLocaleTimeString()}
+                    </span>
+                  </div>
+                </Popup>
+              </Marker>
+            ))}
+          </MapContainer>
+        </div>
       </div>
 
       {/* Info panel - now positioned at the bottom with fixed height */}
       <div
         className={`w-full bg-white dark:bg-gray-800 shadow-xl z-10 transition-all duration-300 ease-in-out ${
           isPanelOpen ? 'h-40' : 'h-12'
-        } overflow-hidden`}
+        } overflow-hidden fixed bottom-0 left-0 border-t border-gray-200 dark:border-gray-700`}
       >
         <div className="flex justify-between items-center p-2 border-b dark:border-gray-700">
           <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
