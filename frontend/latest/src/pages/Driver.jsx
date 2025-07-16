@@ -432,12 +432,14 @@ function Driver({ setUserType }) {
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white text-center mb-4">
           Driver Dashboard
         </h1>
-        <button
+
+        {/* <button
           onClick={handleLogout}
           className="mb-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
         >
           Logout
-        </button>
+        </button> */}
+        
         <BusCard
           driverName={driverName}
           busNo={busNo}
@@ -445,6 +447,7 @@ function Driver({ setUserType }) {
           location={location}
           onLocationUpdate={setDriverLocation}
           isDriver={true}
+          onLogout={handleLogout}
         />
         {/* Show map only when route started (driverLocation available) */}
         {driverLocation && (

@@ -8,6 +8,7 @@ const BusCard = ({
   location,
   onLocationUpdate,
   isDriver = false,
+  onLogout,
 }) => {
   const busNumber = busNo || 'MH-12-AB-1234';
   const name = driverName || 'Rajesh Kumar';
@@ -80,35 +81,35 @@ const BusCard = ({
         <span className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
           Quick Actions
         </span>
-        {!routeStarted ? (
-          <button
-            onClick={handleStartRoute}
-            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-xl text-lg shadow-md transition-colors"
-          >
-            <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-              <path d="M7 6v12l10-6-10-6z" fill="white" />
-            </svg>
-            Start Route
-          </button>
-        ) : (
-          <button
-            onClick={handleEndRoute}
-            className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-xl text-lg shadow-md transition-colors"
-          >
-            <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-              <rect x="6" y="6" width="12" height="12" rx="2" fill="white" />
-            </svg>
-            End Route
-          </button>
-        )}
-        {/* {routeStarted && currentCoords && (
-          <div className="mt-3 text-sm text-gray-700 dark:text-gray-200">
-            <span className="font-medium">Current Location:</span> <br />
-            Lat: {currentCoords.latitude.toFixed(6)}, Lng:{' '}
-            {currentCoords.longitude.toFixed(6)}
-          </div>
-        )} */}
+
+        <div className="flex flex-col xs:flex-row sm:flex-row items-center justify-center gap-4 w-full">
+          {!routeStarted ? (
+            <button
+              onClick={handleStartRoute}
+              className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl text-lg shadow-md transition-colors"
+            >
+              ▶ Start Route
+            </button>
+          ) : (
+            <button
+              onClick={handleEndRoute}
+              className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl text-lg shadow-md transition-colors"
+            >
+              ⏹ End Route
+            </button>
+          )}
+
+          {onLogout && (
+            <button
+              onClick={onLogout}
+              className="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-xl text-lg shadow-md transition-colors"
+            >
+              🚪 Logout
+            </button>
+          )}
+        </div>
       </div>
+
     </div>
   );
 };
