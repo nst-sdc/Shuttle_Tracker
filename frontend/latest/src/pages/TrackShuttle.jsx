@@ -134,9 +134,7 @@ function TrackShuttle() {
 
       {/* Responsive Map Card Container */}
       <div className="flex-1 flex flex-col items-center px-2 sm:px-4 md:px-8 min-h-0">
-        <div
-          className="w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden flex-1 flex flex-col min-h-0"
-        >
+        <div className="w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden flex-1 flex flex-col min-h-0">
           <MapContainer
             center={
               driverLocations.length > 0
@@ -203,73 +201,6 @@ function TrackShuttle() {
               </Marker>
             ))}
           </MapContainer>
-        </div>
-      </div>
-
-      {/* Info panel - now positioned at the bottom with fixed height */}
-      <div
-        className={`w-full bg-white dark:bg-gray-800 shadow-xl z-10 transition-all duration-300 ease-in-out ${
-          isPanelOpen ? 'h-40' : 'h-12'
-        } overflow-hidden fixed bottom-0 left-0 border-t border-gray-200 dark:border-gray-700`}
-      >
-        <div className="flex justify-between items-center p-2 border-b dark:border-gray-700">
-          <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
-            Shuttle Information
-          </h2>
-          <button
-            className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
-            onClick={togglePanel}
-          >
-            {isPanelOpen ? '▼' : '▲'}
-          </button>
-        </div>
-
-        <div className="p-3 overflow-y-auto max-h-[8rem]">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <h3 className="font-medium mb-2 text-gray-700 dark:text-gray-200">
-                Active Shuttles
-              </h3>
-              <ul className="space-y-1">
-                {shuttlePositions.map((shuttle) => (
-                  <li
-                    key={shuttle.id}
-                    className="flex items-center bg-gray-50 dark:bg-gray-700 p-1.5 rounded"
-                  >
-                    <div className="w-2.5 h-2.5 rounded-full bg-green-500 mr-2"></div>
-                    <div>
-                      <span className="font-medium block text-sm">
-                        {shuttle.name}
-                      </span>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
-                        {shuttle.route}
-                      </span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-medium mb-2 text-gray-700 dark:text-gray-200">
-                Schedule
-              </h3>
-              <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded text-xs">
-                <p className="mb-1">
-                  <span className="font-medium">Weekdays:</span> 7:00 AM - 10:00
-                  PM
-                </p>
-                <p className="mb-1">
-                  <span className="font-medium">Weekends:</span> 9:00 AM - 8:00
-                  PM
-                </p>
-                <p>
-                  <span className="font-medium">Frequency:</span> Every 15
-                  minutes
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
