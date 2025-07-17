@@ -111,13 +111,13 @@ node scr/app.js
 📌 Note: All .env.local files are ignored — never push secret keys or tokens.
 > 🔐 Don't forget to configure .env.local (and keep it out of version control).
 
-
-
 Backend will run on `http://localhost:5001`
+
+
 #### Frontend Setup
 ```bash
 # Navigate to frontend directory
-cd frontend/latest
+cd frontend
 
 # Install frontend dependencies
 npm install
@@ -162,10 +162,13 @@ NODE_ENV=development
 4. **Test Your Changes**
    ```bash
    # Run frontend 
-   cd frontend/latest && npm run dev
+   cd frontend && npm run dev
    
    # Run Backend
-   cd backend/src/app.js
+   node backend/src/app.js
+   or
+   cd backend && npm run dev
+
    ```
    
 
