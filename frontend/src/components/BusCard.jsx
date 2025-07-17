@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import socket from '../socket';
+import React, { useState, useRef } from "react";
+import socket from "../socket";
 
 const BusCard = ({
   driverName,
@@ -10,13 +10,13 @@ const BusCard = ({
   isDriver = false,
   onLogout,
 }) => {
-  const busNumber = busNo || 'MH-12-AB-1234';
-  const name = driverName || 'Rajesh Kumar';
-  const currentLocation = location || 'Your space';
-  const phone = mobileNo || '';
-  const estimatedArrival = '8 mins';
-  const status = '🟢 On Time';
-  const direction = 'To College';
+  const busNumber = busNo || "MH-12-AB-1234";
+  const name = driverName || "Rajesh Kumar";
+  const currentLocation = location || "Your space";
+  const phone = mobileNo || "";
+  const estimatedArrival = "8 mins";
+  const status = "🟢 On Time";
+  const direction = "To College";
 
   const [routeStarted, setRouteStarted] = useState(false);
   const watchIdRef = useRef(null);
@@ -29,17 +29,17 @@ const BusCard = ({
           const { latitude, longitude } = pos.coords;
           if (onLocationUpdate) onLocationUpdate({ latitude, longitude });
           if (isDriver) {
-            socket.emit('send-location', { latitude, longitude });
+            socket.emit("send-location", { latitude, longitude });
           }
-          console.log('Driver location:', latitude, longitude);
+          console.log("Driver location:", latitude, longitude);
         },
         (err) => {
-          console.error('Geolocation error:', err);
+          console.error("Geolocation error:", err);
         },
         { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
       );
     } else {
-      alert('Geolocation is not supported by this browser.');
+      alert("Geolocation is not supported by this browser.");
     }
   };
 
@@ -60,7 +60,7 @@ const BusCard = ({
 
       <div className="text-center mb-6">
         <span className="inline-block bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-200 text-sm font-semibold px-4 py-1 rounded-full shadow-sm tracking-wide">
-          {direction === 'To College' ? '🔼 To College' : '🔽 To Hostel'}
+          {direction === "To College" ? "🔼 To College" : "🔽 To Hostel"}
         </span>
       </div>
 
@@ -88,28 +88,54 @@ const BusCard = ({
               onClick={handleStartRoute}
               className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl text-lg shadow-md transition-colors"
             >
-              ▶ Start Route
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#FFFFFF"
+              >
+                <path d="M320-200v-560l440 280-440 280Z" />
+              </svg>{" "}
+              Start Route
             </button>
           ) : (
             <button
               onClick={handleEndRoute}
               className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl text-lg shadow-md transition-colors"
             >
-              ⏹ End Route
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#FFFFFF"
+              >
+                <path d="M240-240v-480h480v480H240Z" />
+              </svg>{" "}
+              End Route
             </button>
           )}
 
           {onLogout && (
             <button
               onClick={onLogout}
-              className="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-xl text-lg shadow-md transition-colors"
+              className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl text-lg shadow-md transition-colors"
             >
-              🚪 Logout
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#FFFFFF"
+              >
+                <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
+              </svg>
+              Logout
             </button>
           )}
         </div>
       </div>
-
     </div>
   );
 };

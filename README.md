@@ -23,7 +23,6 @@ The Shuttle Tracker web-app lets students see the exact location of their colleg
 
 - **Frontend:** React 19 + Vite + TailwindCSS
 - **Backend:** Node.js + Express.js + Socket.io
-- **Database:** MongoDB (with Mongoose ODM)
 - **Authentication:** Google OAuth + JWT
 - **Real-time Communication:** Socket.io
 - **Maps:** Leaflet + React-Leaflet
@@ -50,8 +49,7 @@ Shuttle_Tracker/
 │   └── 📄 README.md          # Backend specific documentation
 │
 ├── 📁 frontend/               # React frontend application
-│   └── 📁 latest/            # Current frontend version
-│       ├── 📁 src/
+│   └────── 📁 src/
 │       │   ├── 📄 App.jsx     # Main React component
 │       │   ├── 📄 main.jsx    # React entry point
 │       │   ├── 📄 socket.js   # Socket.io client setup
@@ -78,9 +76,7 @@ Shuttle_Tracker/
 │
 ├── 📄 README.md              # Project documentation (this file)
 ├── 📄 HLD.md                 # High-level design document
-├── 📄 LICENSE                # MIT license
-└── 📄 package.json          # Root package.json for scripts
-
+└── 📄 LICENSE                # MIT license
 ```
 
 ## 🤝 Contributing
