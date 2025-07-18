@@ -1,4 +1,4 @@
-# Shuttle Tracker 🚍
+# 🚍 Shuttle Tracker
 
 A **real-time bus tracking and pick-up notification system** built for NST students.
 
@@ -6,280 +6,230 @@ A **real-time bus tracking and pick-up notification system** built for NST stude
 
 ## ✨ Overview
 
-The Shuttle Tracker web-app lets students see the exact location of their college shuttle, request a pick-up with one tap, and display their class schedule to the driver—reducing confusion and unnecessary calls.
+The Shuttle Tracker web-app allows students to:
 
-### Impact
+* 📍 See the exact location of their college shuttle
+* 🛎️ Request a pick-up with one tap
+* 🗓️ Display their class schedule to the driver
 
-| Role           | Benefits                                       |
-| -------------- | ---------------------------------------------- |
-| Students       | Shorter waiting times, on-time arrivals        |
-| Drivers        | Fewer calls, clearer routing                   |
-| Faculty        | Fewer class disruptions                        |
-| NST Management | More disciplined, data-driven transport system |
+This system reduces confusion and unnecessary calls, helping everyone stay on time.
+
+### 🎯 Impact
+
+| Role               | Benefits                                       |
+| ------------------ | ---------------------------------------------- |
+| **Students**       | Shorter waiting times, on-time arrivals        |
+| **Drivers**        | Fewer calls, clearer routing                   |
+| **Faculty**        | Fewer class disruptions                        |
+| **NST Management** | More disciplined, data-driven transport system |
 
 ---
 
 ## 🚀 Tech Stack
 
-- **Frontend:** React 19 + Vite + TailwindCSS
-- **Backend:** Node.js + Express.js + Socket.io
-- **Authentication:** Google OAuth + JWT
-- **Real-time Communication:** Socket.io
-- **Maps:** Leaflet + React-Leaflet
+* **Frontend:** React 19, Vite, TailwindCSS
+* **Backend:** Node.js, Express.js, Socket.io
+* **Authentication:** Google OAuth, JWT
+* **Real-time Communication:** Socket.io
+* **Maps:** Leaflet, React-Leaflet
 
 ---
 
-
-
 ## 📂 Project Structure
 
-```
+```bash
 Shuttle_Tracker/
-├── 📁 backend/                 # Node.js backend server
-│   ├── 📁 src/
-│   │   ├── 📄 app.js          # Express app entry point
-│   │   ├── 📄 socket.js       # Socket.io configuration
-│   │   ├── 📁 models/         # Database models
-│   │   │   └── 📄 Bus.js      # Bus model schema
-│   │   └── 📁 routes/         # API route handlers
-│   │       ├── 📄 auth.js     # Authentication routes
-│   │       └── 📄 bus.js      # Bus tracking routes
-│   ├── 📄 package.json        # Backend dependencies
-│   ├── 📄 .env.example       # Environment variables template
-│   └── 📄 README.md          # Backend specific documentation
+├── backend/                 # Node.js backend server
+│   ├── src/
+│   │   ├── app.js          # Express app entry point
+│   │   ├── socket.js       # Socket.io configuration
+│   │   ├── models/         # Database models
+│   │   │   └── Bus.js      # Bus model schema
+│   │   └── routes/         # API route handlers
+│   │       ├── auth.js     # Authentication routes
+│   │       └── bus.js      # Bus tracking routes
+│   ├── package.json        # Backend dependencies
+│   └── .env.example        # Environment variables template
 │
-├── 📁 frontend/               # React frontend application
-│   └────── 📁 src/
-│       │   ├── 📄 App.jsx     # Main React component
-│       │   ├── 📄 main.jsx    # React entry point
-│       │   ├── 📄 socket.js   # Socket.io client setup
-│       │   ├── 📁 components/ # Reusable UI components
-│       │   │   ├── 📄 BusCard.jsx
-│       │   │   ├── 📄 Footer.jsx
-│       │   │   ├── 📄 Loader.jsx
-│       │   │   ├── 📄 Navbar.jsx
-│       │   │   ├── 📄 ThemeProvider.jsx
-│       │   │   └── 📄 ThemeToggle.jsx
-│       │   ├── 📁 pages/      # Application pages/views
-│       │   │   ├── 📄 Driver.jsx      # Driver dashboard
-│       │   │   ├── 📄 Home.jsx        # Landing page
-│       │   │   ├── 📄 Student.jsx     # Student dashboard
-│       │   │   └── 📄 TrackShuttle.jsx # Real-time tracking
-│       │   └── 📁 assets/     # Static assets
-│       │       └── 📁 logo/
-│       │           └── 📄 main-logo.png
-│       ├── 📄 index.html      # HTML template
-│       ├── 📄 package.json    # Frontend dependencies
-│       ├── 📄 vite.config.js  # Vite configuration
-│       ├── 📄 tailwind.config.js # TailwindCSS config
-│       └── 📄 eslint.config.js   # ESLint configuration
+├── frontend/               # React frontend application
+│   └── src/
+│       ├── App.jsx         # Main React component
+│       ├── main.jsx        # React entry point
+│       ├── socket.js       # Socket.io client setup
+│       ├── components/     # Reusable UI components
+│       │   ├── BusCard.jsx
+│       │   ├── Footer.jsx
+│       │   ├── Loader.jsx
+│       │   ├── Navbar.jsx
+│       │   ├── ThemeProvider.jsx
+│       │   └── ThemeToggle.jsx
+│       ├── pages/          # Application pages/views
+│       │   ├── Driver.jsx
+│       │   ├── Home.jsx
+│       │   ├── Student.jsx
+│       │   └── TrackShuttle.jsx
+│       └── assets/logo/main-logo.png
+│       ├── index.html      # HTML template
+│       ├── package.json    # Frontend dependencies
+│       ├── vite.config.js  # Vite configuration
+│       ├── tailwind.config.js # TailwindCSS config
+│       └── eslint.config.js   # ESLint configuration
 │
-├── 📄 README.md              # Project documentation (this file)
-├── 📄 HLD.md                 # High-level design document
-└── 📄 LICENSE                # MIT license
+├── README.md               # Project documentation (this file)
+├── HLD.md                  # High-level design document
+└── LICENSE                 # MIT license
 ```
 
-## 🤝 Contributing
+---
 
-We welcome contributions from the community! Here's how you can get started:
+## 🤝 Contributing Guide
 
-### Development Workflow
+We welcome contributions from the community!
 
-1. **Fork & Clone**
-   ```bash
-   # Fork the repository on GitHub, then clone your fork
-   git clone https://github.com/YOUR_USERNAME/Shuttle_Tracker.git
-   cd Shuttle_Tracker
+### 🚦 Quick Start
 
-#### Backend Setup
+#### 1. Fork & Clone
+
 ```bash
-# Navigate to backend directory
+git clone https://github.com/YOUR_USERNAME/Shuttle_Tracker.git
+cd Shuttle_Tracker
+```
+
+#### 2. Backend Setup
+
+```bash
 cd backend
-
-# Install backend dependencies
 npm install
-
-
-# Start development server
 npm run dev
-or
-node scr/app.js
-
+# or
+node src/app.js
 ```
-##### Create environment file
-##### Edit .env with your configuration (MongoDB URI, JWT secret, etc.)
-📌 Note: All .env.local files are ignored — never push secret keys or tokens.
-> 🔐 Don't forget to configure .env.local (and keep it out of version control).
 
-Backend will run on `http://localhost:5001`
+Create a `.env` file from `.env.example`:
 
-
-#### Frontend Setup
 ```bash
-# Navigate to frontend directory
+cp .env.example .env
+```
+
+> Configure MongoDB URI, Google OAuth, etc.
+
+Backend runs on `http://localhost:5001`
+
+#### 3. Frontend Setup
+
+```bash
 cd frontend
-
-# Install frontend dependencies
 npm install
-
-# Start development server
 npm run dev
 ```
-Frontend will run on `http://localhost:5173`
 
-   
+Frontend runs on `http://localhost:5173`
 
-2. **Create a Feature Branch**
-   ```bash
-   # Always create a new branch from main
-   git checkout main
-   git pull upstream main
-   git checkout -b feature/your-feature-name
-   ```
+#### 4. Create a Feature Branch
 
-3. **Set Up Development Environment**
-   ```bash
-   # Install all dependencies
-   npm run install-all
-   
-   # Start both backend and frontend in development mode
-   npm run dev
-   ```
-<!-- ### Environment Variables
-
-Create a `.env` file in the `backend/` directory:
-```env
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/shuttle_tracker
-JWT_SECRET=your_jwt_secret_here
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-NODE_ENV=development
+```bash
+git checkout -b feature/your-feature-name
 ```
 
---- -->
+---
 
-4. **Test Your Changes**
-   ```bash
-   # Run frontend 
-   cd frontend && npm run dev
-   
-   # Run Backend
-   node backend/src/app.js
-   or
-   cd backend && npm run dev
+### 📄 Environment Variables
 
-   ```
-   
+Backend `.env` example:
 
-   # Test both frontend and backend functionality
-   # Make sure real-time features work correctly
+```env
+MONGODB_URI=mongodb://localhost:27017/shuttle_tracker
+GOOGLE_CLIENT_ID=your_google_client_id
+JWT_SECRET=your_jwt_secret
+```
 
-5. **Commit & Push**
-   ```bash
-   # Stage your changes
-   git add .
-   
-   # Commit with a descriptive message
-   git commit -m "feature: msg "
-   
-   # Push to your fork
-   git push -u origin feature/your-feature-branch-name
-   ```
+Frontend `.env` (optional):
 
-7. **Create Pull Request**
-   - Go to your fork on GitHub
-   - Click "New Pull Request"
-   - Provide a clear title and description
-   - Reference any related issues (Fix #issue no.)
+```env
+VITE_GOOGLE_CLIENT_ID=your_google_client_id
+```
+
+> 🔐 **Important**: `.env.local` is git-ignored — **never push secrets**.
+
+---
+
+### ✅ Development Checklist
 
 #### Commit Message Format
-```
-type(scope): brief description
 
-Detailed explanation (if needed)
+```
+type(scope): short description
+
+Longer description (optional)
 
 Closes #issue-number
 ```
 
 **Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
 
-#### Before Submitting
-- [ ] Code follows project style guidelines
-- [ ] All tests pass (if any)
-- [ ] Documentation updated (if needed)
-- [ ] Real-time features tested with Socket.io
-- [ ] Mobile responsiveness checked
+#### Push & PR
 
+```bash
+git add .
+git commit -m "feat: add feature xyz"
+git push -u origin feature/your-feature-name
+```
 
-### Need Help?
+* Open a **Pull Request** with a clear description.
+* Reference issues like: `Fixes #issue-no`.
 
-- 💬 **Discussion**: Open a GitHub Discussion for questions
-- 🐛 **Bug Reports**: Create an issue with detailed steps to reproduce
-- 💡 **Feature Requests**: Open an issue with clear use case description
-- 📧 **Contact**: Reach out to the maintainers
-
-### First-Time Contributors
-
-Look for issues labeled with:
-- `good first issue` - Perfect for newcomers
-- `help wanted` - Community help needed
-- `documentation` - Improve docs and guides
-
-<!-- ---
-
-## � API Endpoints
-
-### Authentication
-- `POST /api/auth/google` - Google OAuth login
-- `POST /api/auth/logout` - User logout
-- `GET /api/auth/profile` - Get user profile
-
-### Bus Tracking
-- `GET /api/bus/location` - Get current bus locations
-- `POST /api/bus/request-pickup` - Request shuttle pickup
-- `GET /api/bus/schedule` - Get bus schedule
-
-### Real-time Events (Socket.io)
-- `bus-location-update` - Real-time bus location updates
-- `pickup-request` - New pickup request notifications
-- `driver-status` - Driver availability updates
-
---- -->
-
+---
 
 ## 📱 Features
 
-### For Students
-- 🗺️ **Real-time Bus Tracking** - See exact shuttle location on map
-- 📱 **One-tap Pickup Request** - Request shuttle with single button
-- ⏰ **ETA Predictions** - Know when shuttle will arrive
-<!-- - 📅 **Class Schedule Display** - Show your schedule to driver -->
-<!-- - 🔔 **Smart Notifications** - Get notified when shuttle is nearby -->
+### 👩‍🎓 For Students
 
-### For Drivers
-- 🗺️ **Optimized Routes** - Get suggested routes for efficiency
-- 📊 **Trip Analytics** - Track completed trips and timing
+* 🗺️ Real-time Bus Tracking
+* 📱 One-tap Pickup Request
+* ⏰ ETA Predictions
 
-### For Administration
-- 📈 **Usage Analytics** - Monitor system usage and patterns
-- 🚌 **Fleet Management** - Track all buses and driver assignments
-- 📊 **Data Insights** - Generate reports on transport efficiency
-- ⚙️ **System Configuration** - Manage routes, schedules, and users
+### 🧑‍✈️ For Drivers
 
----
+* 🗺️ Optimized Routes
+* 📊 Trip Analytics
 
-## 🔒 Security Features
+### 👨‍💼 For Administration
 
-- **Google OAuth Integration** - Secure authentication with NST email domain
-- **JWT Token Management** - Stateless authentication with refresh tokens
-- **Rate Limiting** - Prevent API abuse and spam requests
-- **CORS Protection** - Secure cross-origin resource sharing
-- **Input Validation** - Sanitize and validate all user inputs
-- **Environment Variables** - Secure configuration management
+* 📈 Usage Analytics
+* 🚌 Fleet Management
+* 📊 Data Insights
+* ⚙️ System Configuration
 
 ---
 
-## �📄 License
+## 🛡️ Security Features
 
-This project is released under the MIT License — see `LICENSE` for details.
+* Google OAuth Login (NST domain)
+* JWT Token Authentication
+* Rate Limiting & API Protection
+* CORS Security
+* Input Validation & Sanitization
+* Environment Variables for Secrets
+
+---
+
+## 💬 Community Support
+
+* **Discussions:** Open for Q\&A
+* **Bug Reports:** Use Issues with reproducible steps
+* **Feature Requests:** Open an Issue with details
+* **Contact:** Maintainers listed in repo
+
+#### First-time contributors?
+
+* Look for labels: `good first issue`, `help wanted`, `documentation`
+
+---
+
+## 📝 License
+
+Released under [MIT License](LICENSE).
+
+---
+
+Happy Contributing ❤️
