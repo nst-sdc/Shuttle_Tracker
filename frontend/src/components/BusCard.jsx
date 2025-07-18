@@ -10,10 +10,11 @@ const BusCard = ({
   isDriver = false,
   onLogout,
 }) => {
+  // dummy data
   const busNumber = busNo || "MH-12-AB-1234";
   const name = driverName || "Rajesh Kumar";
   const currentLocation = location || "Your space";
-  const phone = mobileNo || "";
+  const phone = mobileNo || "1234567890";
   const estimatedArrival = "8 mins";
   const status = "🟢 On Time";
   const direction = "To College";
