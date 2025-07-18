@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-import socket from '../socket';
+import React, { useState, useEffect } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import socket from "../socket";
 
 // Fix for default marker icons in react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
-    'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+    "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
+  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
 
 // Helper component to update map center on driver location change
@@ -29,95 +29,35 @@ function MapUpdater({ driverLocation }) {
 }
 
 function TrackShuttle() {
-  const [isPanelOpen, setIsPanelOpen] = useState(true);
   const [driverLocations, setDriverLocations] = useState([]);
 
-  // Example shuttle data - replace with your actual data source
-  const [shuttlePositions, setShuttlePositions] = useState([
-    {
-      id: 1,
-      position: [18.623058580402812, 73.91117395579613],
-      name: 'Shuttle A',
-      status: 'On Time',
-      route: 'Campus Loop',
-    },
-    {
-      id: 2,
-      position: [18.61194067125513, 73.91169656239255],
-      name: 'Shuttle B',
-      status: '5 min delay',
-      route: 'Downtown Express',
-    },
-  ]);
-
-  // Example initial map position - set to your campus coordinates
-  const mapCenter = [18.617, 73.9114]; // Centered between your shuttle positions
+  // Set your default map center (e.g., campus center)
+  const mapCenter = [18.617, 73.9114];
   const zoom = 15;
-
-  // In a real application, you would fetch shuttle positions from your backend
-  useEffect(() => {
-    // Example function to update shuttle positions
-    const fetchShuttlePositions = () => {
-      // Replace with actual API call
-      // Example: fetch('/api/shuttle-positions').then(res => res.json()).then(data => setShuttlePositions(data));
-
-      // Simulated position update for demonstration
-      const simulateMovement = () => {
-        setShuttlePositions((prev) =>
-          prev.map((shuttle) => ({
-            ...shuttle,
-            position: [
-              shuttle.position[0] + (Math.random() - 0.5) * 0.0005,
-              shuttle.position[1] + (Math.random() - 0.5) * 0.0005,
-            ],
-          }))
-        );
-      };
-
-      return simulateMovement;
-    };
-
-    const updatePositions = fetchShuttlePositions();
-    const interval = setInterval(updatePositions, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   // Listen for All Driver Locations
   useEffect(() => {
     function handleAllLocations(locations) {
       setDriverLocations(locations);
     }
-    socket.on('all-driver-locations', handleAllLocations);
+    socket.on("all-driver-locations", handleAllLocations);
     return () => {
-      socket.off('all-driver-locations', handleAllLocations);
+      socket.off("all-driver-locations", handleAllLocations);
     };
   }, []);
 
   // Log updated driver locations every time they change
   useEffect(() => {
-    console.log('All driver locations:', driverLocations);
+    console.log("All driver locations:", driverLocations);
   }, [driverLocations]);
 
-  // Custom shuttle icons could be added here
-  const shuttleIcon = new L.Icon({
-    iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-  });
-
+  // Driver icon
   const driverIcon = new L.Icon({
-    iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png', // a different icon for driver
+    iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
     iconSize: [32, 32],
     iconAnchor: [16, 32],
     popupAnchor: [0, -32],
   });
-
-  const togglePanel = () => {
-    setIsPanelOpen(!isPanelOpen);
-  };
-
   return (
     <div className="min-h-screen w-full flex flex-col relative bg-gray-100 dark:bg-gray-900">
       {/* Header with gradient background - smaller height */}
@@ -152,32 +92,7 @@ function TrackShuttle() {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            {shuttlePositions.map((shuttle) => (
-              <Marker
-                key={shuttle.id}
-                position={shuttle.position}
-                icon={shuttleIcon}
-              >
-                <Popup className="shuttle-popup">
-                  <div className="text-center p-1">
-                    <span className="font-bold text-lg text-blue-700 block mb-1">
-                      {shuttle.name}
-                    </span>
-                    <span className="block text-sm font-medium">
-                      {shuttle.route}
-                    </span>
-                    <span className="block text-xs text-gray-500 mb-1">
-                      Status: {shuttle.status}
-                    </span>
-                    <span className="text-xs text-gray-600 italic block">
-                      Updated: {new Date().toLocaleTimeString()}
-                    </span>
-                  </div>
-                </Popup>
-              </Marker>
-            ))}
-
-            {/* Driver marker */}
+            {/* Real driver marker(s) only */}
             {driverLocations.map((driver) => (
               <Marker
                 key={driver.id}
@@ -190,7 +105,7 @@ function TrackShuttle() {
                       Driver
                     </span>
                     <span className="block text-xs text-gray-500 mb-1">
-                      Lat: {driver.latitude.toFixed(6)}, Lng:{' '}
+                      Lat: {driver.latitude.toFixed(6)}, Lng:{" "}
                       {driver.longitude.toFixed(6)}
                     </span>
                     <span className="text-xs text-gray-600 italic block">

@@ -11,8 +11,8 @@ function Footer({ userType }) {
           <Home size={24} className='text-white' />
           <span className='text-white'>Home</span>
         </Link>
-
-        {/* Track Shuttle */}
+        
+        {/* Track Shuttle  */}
         <Link to="/track-shuttle" className="flex flex-col items-center text-sm hover:opacity-80">
           <MapPin size={24} className='text-white'/>
           <span className='text-white'>Track&nbsp;Shuttle</span>
