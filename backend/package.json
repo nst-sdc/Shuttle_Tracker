@@ -5,7 +5,8 @@
   "type": "commonjs",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "build": "echo 'No build step required'"
   },
   "dependencies": {
     "cookie-parser": "^1.4.7",

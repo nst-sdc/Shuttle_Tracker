@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import BusCard from '../components/BusCard';
-import toast, { Toaster } from 'react-hot-toast';
-import TrackShuttle from './TrackShuttle';
-import { GoogleLogin } from '@react-oauth/google';
+import React, { useEffect, useState } from "react";
+import BusCard from "../components/BusCard";
+import toast, { Toaster } from "react-hot-toast";
+import TrackShuttle from "./TrackShuttle";
+import { GoogleLogin } from "@react-oauth/google";
 
-const BACKEND_URL = 'https://shuttle-tracker.onrender.com'; // Change if your backend runs elsewhere
+const BACKEND_URL =
+  import.meta.env.VITE_API_URL || "https://shuttle-tracker.onrender.com";
 
 function Driver({ setUserType }) {
   const [dateTime, setDateTime] = useState(new Date());
   const [showForm, setShowForm] = useState(true); // show form first
   const [showLogin, setShowLogin] = useState(false); // then login
   const [isLoggedIn, setIsLoggedIn] = useState(false); // then buscard
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [driverName, setDriverName] = useState('');
-  const [busNo, setBusNo] = useState('');
-  const [mobileNo, setMobileNo] = useState('');
-  const [location, setLocation] = useState('Campus');
+  const [driverName, setDriverName] = useState("");
+  const [busNo, setBusNo] = useState("");
+  const [mobileNo, setMobileNo] = useState("");
+  const [location, setLocation] = useState("Campus");
   const [driverLocation, setDriverLocation] = useState(null);
 
   useEffect(() => {
@@ -29,10 +30,10 @@ function Driver({ setUserType }) {
 
   useEffect(() => {
     // Check for JWT in localStorage on mount
-    const token = localStorage.getItem('jwt_token');
-    const user = localStorage.getItem('driver_user');
-    const details = localStorage.getItem('driver_details');
-    console.log('Checking localStorage:', { token: !!token, user: !!user });
+    const token = localStorage.getItem("jwt_token");
+    const user = localStorage.getItem("driver_user");
+    const details = localStorage.getItem("driver_details");
+    console.log("Checking localStorage:", { token: !!token, user: !!user });
     if (token && user) {
       const userData = JSON.parse(user);
       setEmail(userData.email);
@@ -40,7 +41,7 @@ function Driver({ setUserType }) {
       setShowForm(false);
       setShowLogin(false);
       setIsLoggedIn(true);
-      if (setUserType) setUserType('driver');
+      if (setUserType) setUserType("driver");
       // Restore driver details
       if (details) {
         const { driverName, busNo, mobileNo, location } = JSON.parse(details);
@@ -49,7 +50,7 @@ function Driver({ setUserType }) {
         setMobileNo(mobileNo);
         setLocation(location);
       }
-      console.log('User restored from localStorage:', userData.email);
+      console.log("User restored from localStorage:", userData.email);
     }
   }, [setUserType]);
 
@@ -57,16 +58,16 @@ function Driver({ setUserType }) {
   const handleDetailsSubmit = (e) => {
     e.preventDefault();
     if (!driverName || !busNo || !mobileNo || !location) {
-      toast.error('Please fill all the details.', {
-        position: 'top-center',
-        style: { fontSize: '1.1rem', fontWeight: 'bold' },
+      toast.error("Please fill all the details.", {
+        position: "top-center",
+        style: { fontSize: "1.1rem", fontWeight: "bold" },
         duration: 2000,
       });
       return;
     }
     // Save details to localStorage
     localStorage.setItem(
-      'driver_details',
+      "driver_details",
       JSON.stringify({
         driverName,
         busNo,
@@ -76,11 +77,11 @@ function Driver({ setUserType }) {
     );
     setShowForm(false);
     setShowLogin(true);
-    toast.success('Details saved! Please login.', {
-      position: 'top-center',
-      style: { fontSize: '1.1rem', fontWeight: 'bold' },
+    toast.success("Details saved! Please login.", {
+      position: "top-center",
+      style: { fontSize: "1.1rem", fontWeight: "bold" },
       duration: 1200,
-      iconTheme: { primary: '#22c55e', secondary: '#fff' },
+      iconTheme: { primary: "#22c55e", secondary: "#fff" },
     });
   };
 
@@ -90,28 +91,28 @@ function Driver({ setUserType }) {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      if (email === 'driver@example.com' && password === 'password') {
-        toast.success('Driver logged in successfully', {
-          position: 'top-center',
-          style: { fontSize: '1.1rem', fontWeight: 'bold' },
+      if (email === "driver@example.com" && password === "password") {
+        toast.success("Driver logged in successfully", {
+          position: "top-center",
+          style: { fontSize: "1.1rem", fontWeight: "bold" },
           duration: 1200,
-          iconTheme: { primary: '#22c55e', secondary: '#fff' },
+          iconTheme: { primary: "#22c55e", secondary: "#fff" },
         });
         setTimeout(() => {
           setShowLogin(false);
           setIsLoggedIn(true);
-          if (setUserType) setUserType('driver');
+          if (setUserType) setUserType("driver");
         }, 1200);
       } else if (email && password) {
-        toast.error('Incorrect email or password', {
-          position: 'top-center',
-          style: { fontSize: '1.1rem', fontWeight: 'bold' },
+        toast.error("Incorrect email or password", {
+          position: "top-center",
+          style: { fontSize: "1.1rem", fontWeight: "bold" },
           duration: 2500,
         });
       } else {
-        toast.error('Something went wrong. Please try again.', {
-          position: 'top-center',
-          style: { fontSize: '1.1rem', fontWeight: 'bold' },
+        toast.error("Something went wrong. Please try again.", {
+          position: "top-center",
+          style: { fontSize: "1.1rem", fontWeight: "bold" },
           duration: 2500,
         });
       }
@@ -121,41 +122,48 @@ function Driver({ setUserType }) {
   // Google login handler (calls backend)
   const handleGoogleLogin = async (credentialResponse) => {
     setIsLoading(true);
+    console.log("Starting Google login with backend URL:", BACKEND_URL);
     try {
       const res = await fetch(`${BACKEND_URL}/api/auth/google`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ credential: credentialResponse.credential }),
-        credentials: 'include', // send cookies if backend uses them
+        credentials: "include", // send cookies if backend uses them
       });
+
+      console.log("Response status:", res.status);
       const data = await res.json();
+      console.log("Response data:", data);
+
       if (res.ok && data.token && data.user) {
-        console.log('Google login successful:', data.user);
-        localStorage.setItem('jwt_token', data.token);
-        localStorage.setItem('driver_user', JSON.stringify(data.user));
+        console.log("Google login successful:", data.user);
+        localStorage.setItem("jwt_token", data.token);
+        localStorage.setItem("driver_user", JSON.stringify(data.user));
         setEmail(data.user.email);
-        toast.success('Google login successful', {
-          position: 'top-center',
-          style: { fontSize: '1.1rem', fontWeight: 'bold' },
+        toast.success("Google login successful", {
+          position: "top-center",
+          style: { fontSize: "1.1rem", fontWeight: "bold" },
           duration: 1200,
-          iconTheme: { primary: '#22c55e', secondary: '#fff' },
+          iconTheme: { primary: "#22c55e", secondary: "#fff" },
         });
         setTimeout(() => {
           setShowLogin(false);
           setIsLoggedIn(true);
-          if (setUserType) setUserType('driver');
+          if (setUserType) setUserType("driver");
         }, 1200);
       } else {
-        toast.error(data.error || 'Google login failed', {
-          position: 'top-center',
-          style: { fontSize: '1.1rem', fontWeight: 'bold' },
+        console.error("Google login failed:", data);
+        toast.error(data.error || `Google login failed: ${res.status}`, {
+          position: "top-center",
+          style: { fontSize: "1.1rem", fontWeight: "bold" },
           duration: 2500,
         });
       }
-    } catch {
-      toast.error('Google login failed. Please try again.', {
-        position: 'top-center',
-        style: { fontSize: '1.1rem', fontWeight: 'bold' },
+    } catch (error) {
+      console.error("Google login error:", error);
+      toast.error(`Google login failed: ${error.message}`, {
+        position: "top-center",
+        style: { fontSize: "1.1rem", fontWeight: "bold" },
         duration: 2500,
       });
     } finally {
@@ -165,9 +173,9 @@ function Driver({ setUserType }) {
 
   // Logout function
   const handleLogout = () => {
-    localStorage.removeItem('jwt_token');
-    localStorage.removeItem('driver_user');
-    localStorage.removeItem('driver_details'); // Clear driver details on logout
+    localStorage.removeItem("jwt_token");
+    localStorage.removeItem("driver_user");
+    localStorage.removeItem("driver_details"); // Clear driver details on logout
     setIsLoggedIn(false);
     setShowLogin(true);
     if (setUserType) setUserType(null);
@@ -255,11 +263,11 @@ function Driver({ setUserType }) {
         <Toaster
           position="top-center"
           toastOptions={{
-            style: { fontSize: '1.1rem', fontWeight: 'bold' },
+            style: { fontSize: "1.1rem", fontWeight: "bold" },
             duration: 2500,
-            success: { iconTheme: { primary: '#22c55e', secondary: '#fff' } },
-            error: { iconTheme: { primary: '#ef4444', secondary: '#fff' } },
-            className: 'animate__animated animate__fadeInDown',
+            success: { iconTheme: { primary: "#22c55e", secondary: "#fff" } },
+            error: { iconTheme: { primary: "#ef4444", secondary: "#fff" } },
+            className: "animate__animated animate__fadeInDown",
           }}
         />
         <div className="w-full max-w-md mx-auto">
@@ -282,7 +290,7 @@ function Driver({ setUserType }) {
             </h6>
 
             <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">
-              Don't have an account yet?{' '}
+              Don't have an account yet?{" "}
               <a className="text-blue-600 dark:text-blue-400 hover:underline focus:outline-none">
                 Sign up
               </a>
@@ -353,8 +361,8 @@ function Driver({ setUserType }) {
               disabled={isLoading}
               className={`w-full py-2.5 md:py-3 px-4 text-white font-medium rounded-lg transition-colors ${
                 isLoading
-                  ? 'bg-blue-400 dark:bg-blue-500 cursor-not-allowed'
-                  : 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600'
+                  ? "bg-blue-400 dark:bg-blue-500 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
               }`}
             >
               {isLoading ? (
@@ -382,7 +390,7 @@ function Driver({ setUserType }) {
                   Logging in...
                 </div>
               ) : (
-                'Login'
+                "Login"
               )}
             </button>
 
@@ -403,9 +411,9 @@ function Driver({ setUserType }) {
               <GoogleLogin
                 onSuccess={handleGoogleLogin}
                 onError={() => {
-                  toast.error('Google login failed', {
-                    position: 'top-center',
-                    style: { fontSize: '1.1rem', fontWeight: 'bold' },
+                  toast.error("Google login failed", {
+                    position: "top-center",
+                    style: { fontSize: "1.1rem", fontWeight: "bold" },
                     duration: 2500,
                   });
                 }}
@@ -445,7 +453,7 @@ function Driver({ setUserType }) {
         {/* Show map only when route started (driverLocation available) */}
         {driverLocation && (
           <div className="mt-8 pb-24">
-            {' '}
+            {" "}
             <TrackShuttle driverLocation={driverLocation} />
           </div>
         )}

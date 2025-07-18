@@ -16,7 +16,9 @@ const PORT = process.env.PORT || 5001;
 const allowedOrigins = [
   "http://localhost:5173",
   "https://shuttle-tracker-gamma.vercel.app",
-];
+  // Add your actual Vercel domain here if different
+  process.env.FRONTEND_URL, // Allow dynamic frontend URL from env
+].filter(Boolean); // Remove undefined values
 
 app.use(
   cors({
