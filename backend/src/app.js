@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 5001;
 // Middleware
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://shuttle-tracker-qxyg.vercel.app",
+  "https://shuttle-tracker-beryl.vercel.app/driver",
 ];
 
 app.use(
