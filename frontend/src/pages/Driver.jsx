@@ -338,7 +338,7 @@ function Driver({ setUserType }) {
               />
             </div>
 
-            {/* Forgot password link positioned right after password field */}
+            {/* Forgot password */}
             <div className="flex justify-end -mt-1 mb-1">
               <a
                 type="button"
@@ -433,13 +433,6 @@ function Driver({ setUserType }) {
           Driver Dashboard
         </h1>
 
-        {/* <button
-          onClick={handleLogout}
-          className="mb-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-        >
-          Logout
-        </button> */}
-        
         <BusCard
           driverName={driverName}
           busNo={busNo}
@@ -453,7 +446,6 @@ function Driver({ setUserType }) {
         {driverLocation && (
           <div className="mt-8 pb-24">
             {' '}
-            {/* Add pb-24 to prevent overlap with fixed footer */}
             <TrackShuttle driverLocation={driverLocation} />
           </div>
         )}
