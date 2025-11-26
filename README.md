@@ -223,6 +223,8 @@ git push -u origin feature/your-feature-name
 #### First-time contributors?
 
 * Look for labels: `good first issue`, `help wanted`, `documentation`
+* If you're unsure about an issue, **comment and ask for clarification** maintainers are happy to help
+* Join the discussions and ask questions in **Issues** or **Discussions**
 
 ---
 
