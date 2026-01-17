@@ -42,9 +42,13 @@ const Navbar = () => {
             <Link to="/" className="flex items-center gap-2 group">
               <motion.div
                 whileHover={{ rotate: 15 }}
-                className="bg-gradient-to-tr from-blue-600 to-indigo-500 p-2 rounded-lg"
+                className="p-1 rounded-lg"
               >
-                <span className="text-white font-bold text-xl">ST</span>
+                <img
+                  src="/logo.png"
+                  alt="ShuttleTracker Logo"
+                  className="w-10 h-10 object-contain"
+                />
               </motion.div>
               <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 group-hover:from-blue-600 group-hover:to-indigo-500 transition-all duration-300">
                 ShuttleTracker
