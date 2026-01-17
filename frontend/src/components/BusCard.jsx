@@ -4,19 +4,20 @@ import {
   Bus,
   User,
   Phone,
-  MapPin,
-  Clock,
   Play,
   Square,
-  LogOut,
+  Navigation,
+  Activity,
+  ShieldCheck,
+  ChevronRight,
+  ChevronLeft,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const BusCard = ({
   driverName,
   busNo,
   mobileNo,
-  location,
   onLocationUpdate,
   isDriver = false,
   onLogout,
@@ -24,13 +25,11 @@ const BusCard = ({
   // dummy data
   const busNumber = busNo || "MH-12-AB-1234";
   const name = driverName || "Rajesh Kumar";
-  const currentLocation = location || "Your space";
   const phone = mobileNo || "1234567890";
-  const estimatedArrival = "8 mins";
-  const status = "🟢 On Time";
   const direction = "To College";
 
   const [routeStarted, setRouteStarted] = useState(false);
+  const [showDriverInfo, setShowDriverInfo] = useState(false);
   const watchIdRef = useRef(null);
 
   const handleStartRoute = () => {
@@ -43,7 +42,6 @@ const BusCard = ({
           if (isDriver) {
             socket.emit("send-location", { latitude, longitude });
           }
-          console.log("Driver location:", latitude, longitude);
         },
         (err) => {
           console.error("Geolocation error:", err);
@@ -65,80 +63,167 @@ const BusCard = ({
   };
 
   return (
-    <motion.div
-      initial={{ scale: 0.9, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      className="glass-panel rounded-3xl max-w-md mx-auto mt-6 p-8 relative overflow-hidden"
-    >
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary" />
+    <div className="flex items-start justify-center gap-4 transition-all w-full max-w-5xl mx-auto p-4">
+      {/* Shuttle Info Card */}
+      <motion.div layout className="relative w-full max-w-md">
+        <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[2rem] blur opacity-25" />
+        <div className="relative glass-panel rounded-[2rem] p-8 overflow-hidden border border-white/20 dark:border-white/10 shadow-2xl">
+          {/* Status & Direction Header */}
+          <div className="flex justify-between items-start mb-8">
+            <div className="flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border bg-blue-500/10 text-blue-500 border-blue-500/20">
+              <Navigation className="w-3 h-3" />
+              <span>{direction}</span>
+            </div>
+            <div
+              className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border ${routeStarted ? "bg-green-500/10 text-green-500 border-green-500/20" : "bg-yellow-500/10 text-yellow-500 border-yellow-500/20"}`}
+            >
+              <span
+                className={`w-2 h-2 rounded-full ${routeStarted ? "bg-green-500" : "bg-yellow-500"} animate-pulse`}
+              />
+              {routeStarted ? "LIVE" : "IDLE"}
+            </div>
+          </div>
 
-      <div className="text-center mb-6">
-        <h2 className="text-3xl font-bold flex items-center justify-center gap-3 mb-2">
-          <Bus className="w-8 h-8 text-primary" />
-          <span>Shuttle Info</span>
-        </h2>
-        <span className="inline-block bg-primary/10 text-primary border border-primary/20 text-sm font-semibold px-4 py-1 rounded-full">
-          {direction === "To College" ? "🔼 To College" : "🔽 To Hostel"}
-        </span>
-      </div>
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-tr from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/30 mb-4 transform rotate-3">
+              <Bus className="w-10 h-10 text-white" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Shuttle Info
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">Bus details & Controls</p>
+          </div>
 
-      <div className="space-y-4">
-        <InfoRow icon={Bus} label="Bus Number" value={busNumber} />
-        <InfoRow icon={User} label="Driver" value={name} />
-        <InfoRow icon={Phone} label="Mobile" value={phone} />
-        <InfoRow icon={MapPin} label="Location" value={currentLocation} />
-        <InfoRow icon={Clock} label="ETA" value={estimatedArrival} />
-      </div>
+          <div className="space-y-3 mb-8">
+            <InfoCard
+              icon={ShieldCheck}
+              label="Bus Number"
+              value={busNumber}
+              color="text-amber-500"
+            />
 
-      <div className="mt-8 pt-6 border-t border-border/50">
-        <div className="flex flex-col items-center gap-4">
-          <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-            Controls
-          </span>
+            {/* Toggle Driver Info Button */}
+            <button
+              onClick={() => setShowDriverInfo(!showDriverInfo)}
+              className="w-full flex items-center justify-between p-3.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-gray-800 hover:border-blue-500/30 transition-all group cursor-pointer"
+            >
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-white dark:bg-gray-800 shadow-sm text-blue-500">
+                  <User className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                  Driver Details
+                </span>
+              </div>
+              <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 text-sm font-medium">
+                {showDriverInfo ? "Hide" : "View"}
+                {showDriverInfo ? (
+                  <ChevronLeft className="w-4 h-4" />
+                ) : (
+                  <ChevronRight className="w-4 h-4" />
+                )}
+              </div>
+            </button>
+          </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
+          {/* Controls */}
+          <div className="pt-6 border-t border-gray-200 dark:border-gray-800">
             {!routeStarted ? (
-              <button
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={handleStartRoute}
-                className="flex-1 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-green-500/20 active:scale-95 w-full"
+                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-xl shadow-xl shadow-blue-500/20 transition-all"
               >
                 <Play className="fill-current w-5 h-5" />
-                Start Route
-              </button>
+                Start Journey
+              </motion.button>
             ) : (
-              <button
-                onClick={handleEndRoute}
-                className="flex-1 flex items-center justify-center gap-2 bg-destructive hover:bg-destructive/90 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-destructive/20 active:scale-95 w-full"
-              >
-                <Square className="fill-current w-5 h-5" />
-                End Route
-              </button>
-            )}
+              <div className="grid grid-cols-2 gap-3">
+                <motion.button
+                  layout
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleEndRoute}
+                  className="flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 font-bold py-3 px-6 rounded-xl transition-all"
+                >
+                  <Square className="fill-current w-5 h-5" />
+                  End
+                </motion.button>
 
-            {onLogout && (
-              <button
-                onClick={onLogout}
-                className="flex items-center justify-center gap-2 bg-secondary/10 hover:bg-secondary/20 text-secondary border border-secondary/20 font-bold py-3 px-6 rounded-xl transition-all w-full sm:w-auto"
-              >
-                <LogOut className="w-5 h-5" />
-              </button>
+                <motion.div
+                  layout
+                  className="flex items-center justify-center p-3 rounded-xl bg-blue-50 dark:bg-blue-900/20"
+                >
+                  <Activity className="w-5 h-5 text-blue-500 mr-2 animate-pulse" />
+                  <span className="text-blue-600 dark:text-blue-400 font-bold">
+                    In Progress
+                  </span>
+                </motion.div>
+              </div>
             )}
           </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+
+      {/* Driver Info Card (Expandable) */}
+      <AnimatePresence mode="popLayout">
+        {showDriverInfo && (
+          <motion.div
+            layout
+            initial={{ opacity: 0, x: -20, scale: 0.9 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: -20, scale: 0.9 }}
+            className="relative w-full max-w-xs hidden md:block" // Hidden on mobile initially for simplicity, or change to flex-col on mobile
+          >
+            <div className="relative glass-panel rounded-[2rem] p-8 overflow-hidden border border-white/20 dark:border-white/10 shadow-xl h-full flex flex-col justify-center">
+              <div className="text-center">
+                <div className="inline-block p-1 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 mb-4">
+                  <div className="p-1 rounded-full bg-white dark:bg-gray-900">
+                    <User className="w-16 h-16 text-gray-400 p-2" />
+                  </div>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                  {name}
+                </h3>
+                <p className="text-sm text-gray-500">Official Driver</p>
+              </div>
+
+              <div className="mt-8 space-y-4">
+                <InfoCard
+                  icon={Phone}
+                  label="Mobile"
+                  value={phone}
+                  color="text-green-500"
+                />
+                <div className="flex items-center justify-between p-3.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-gray-800">
+                  <span className="text-xs font-semibold text-gray-500 uppercase">
+                    License
+                  </span>
+                  <span className="font-bold text-sm">Valid</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
 
-const InfoRow = ({ icon: Icon, label, value }) => (
-  <div className="flex justify-between items-center p-3 rounded-xl hover:bg-white/5 transition-colors">
+const InfoCard = ({ icon: Icon, label, value, color }) => (
+  <div className="flex items-center justify-between p-3.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-gray-800 hover:border-blue-500/30 transition-all group">
     <div className="flex items-center gap-3">
-      <div className="p-2 rounded-lg bg-primary/10 text-primary">
+      <div
+        className={`p-2 rounded-lg bg-white dark:bg-gray-800 shadow-sm ${color}`}
+      >
         <Icon className="w-5 h-5" />
       </div>
-      <span className="text-muted-foreground font-medium text-sm">{label}</span>
+      <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+        {label}
+      </span>
     </div>
-    <span className="font-semibold text-foreground text-base">{value}</span>
+    <span className="font-bold text-gray-900 dark:text-gray-100">{value}</span>
   </div>
 );
 
