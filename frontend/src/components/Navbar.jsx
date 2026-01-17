@@ -1,124 +1,144 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ThemeToggle } from './ThemeToggle';
-import mainLogo from '../assets/logo/main-logo.png';
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, User, LogIn, Map, LayoutDashboard } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
 
-function Navbar({ userType }) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-    document.body.classList.toggle('menu-open', !isMenuOpen);
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const navLinks = [
+    { name: "Home", path: "/", icon: <LayoutDashboard size={18} /> },
+    { name: "Student", path: "/student", icon: <User size={18} /> },
+    { name: "Driver", path: "/driver", icon: <LogIn size={18} /> },
+    { name: "Track", path: "/track-shuttle", icon: <Map size={18} /> },
+  ];
 
   return (
-    <nav className="bg-blue-600 dark:bg-gray-800 text-white py-4 px-8 flex justify-between items-center shadow-md sticky top-0 z-10 transition-colors duration-200">
-      <Link
-        to="/"
-        className="logo-link no-underline flex items-center gap-2 focus:outline-none"
-        aria-label="Shuttle Tracker Home"
+    <>
+      <motion.nav
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled || isOpen
+            ? "glass-panel bg-white/70 dark:bg-gray-900/70 border-b border-gray-200/50 dark:border-gray-800/50 py-3"
+            : "bg-transparent py-5"
+        }`}
       >
-        <img
-          src={mainLogo}
-          alt="Shuttle Tracker Logo"
-          // Adjusted classes for smaller visibility
-          className="h-10 md:h-14 lg:h-16 max-w-[120px] sm:max-w-[180px] lg:max-w-[240px] object-contain"
-        />
-      </Link>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            {/* Logo */}
+            <Link to="/" className="flex items-center gap-2 group">
+              <motion.div
+                whileHover={{ rotate: 15 }}
+                className="bg-gradient-to-tr from-blue-600 to-indigo-500 p-2 rounded-lg"
+              >
+                <span className="text-white font-bold text-xl">ST</span>
+              </motion.div>
+              <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 group-hover:from-blue-600 group-hover:to-indigo-500 transition-all duration-300">
+                ShuttleTracker
+              </span>
+            </Link>
 
-      {/* 📱 Mobile menu button */}
-      <button
-        className="mobile-menu-btn lg:hidden text-white p-2 focus:outline-none"
-        onClick={toggleMenu}
-        aria-label="Toggle menu"
-      >
-        {isMenuOpen ? (
-          <span className="text-2xl">✕</span>
-        ) : (
-          <span className="text-2xl">☰</span>
-        )}
-      </button>
-
-      {/* 💻 Desktop nav links */}
-      <div className="hidden lg:flex items-center gap-6">
-        <Link
-          to="/"
-          className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
-        >
-          Home
-        </Link>
-        {userType !== 'driver' && (
-          <Link
-            to="/student"
-            className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
-          >
-            Student
-          </Link>
-        )}
-        {userType !== 'student' && (
-          <Link
-            to="/driver"
-            className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
-          >
-            Driver
-          </Link>
-        )}
-        <Link
-          to="/track-shuttle"
-          className="text-white no-underline px-3 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
-        >
-          Track Shuttle
-        </Link>
-        <ThemeToggle />
-      </div>
-
-      {/* 📱 Mobile nav overlay */}
-      {isMenuOpen && (
-        <div className="fixed inset-0 bg-blue-800/95 dark:bg-gray-900/95 z-50 flex flex-col items-center justify-center mobile-nav-overlay">
-          <button
-            className="absolute top-4 right-8 text-white text-2xl"
-            onClick={toggleMenu}
-            aria-label="Close menu"
-          >
-            ✕
-          </button>
-          <div className="flex flex-col items-center gap-6 text-xl">
-            <Link
-              to="/"
-              className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
-              onClick={toggleMenu}
-            >
-              Home
-            </Link>
-            <Link
-              to="/student"
-              className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
-              onClick={toggleMenu}
-            >
-              Student
-            </Link>
-            <Link
-              to="/driver"
-              className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
-              onClick={toggleMenu}
-            >
-              Driver
-            </Link>
-            <Link
-              to="/track-shuttle"
-              className="text-white no-underline px-5 py-3 rounded-md hover:bg-blue-700 dark:hover:bg-gray-700 transition-colors"
-              onClick={toggleMenu}
-            >
-              Track Shuttle
-            </Link>
-            <div className="mt-4">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-1">
+              <div className="flex items-center bg-gray-100/50 dark:bg-gray-800/50 p-1 rounded-full backdrop-blur-sm border border-gray-200 dark:border-gray-700 mr-4">
+                {navLinks.map((link) => {
+                  const isActive = location.pathname === link.path;
+                  return (
+                    <Link
+                      key={link.name}
+                      to={link.path}
+                      className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
+                        isActive
+                          ? "text-white"
+                          : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+                      }`}
+                    >
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeTab"
+                          className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full shadow-lg shadow-blue-500/30"
+                          transition={{
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 30,
+                          }}
+                        />
+                      )}
+                      <span className="relative z-10 flex items-center gap-2">
+                        {link.icon}
+                        {link.name}
+                      </span>
+                    </Link>
+                  );
+                })}
+              </div>
               <ThemeToggle />
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden flex items-center gap-4">
+              <ThemeToggle />
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                {isOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
             </div>
           </div>
         </div>
-      )}
-    </nav>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="md:hidden overflow-hidden border-t border-gray-200 dark:border-gray-800"
+            >
+              <div className="glass-panel text-white p-4 space-y-2 m-2 rounded-2xl">
+                {navLinks.map((link, index) => (
+                  <motion.div
+                    key={link.name}
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <Link
+                      to={link.path}
+                      onClick={() => setIsOpen(false)}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                        location.pathname === link.path
+                          ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
+                          : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                      }`}
+                    >
+                      {link.icon}
+                      <span className="font-medium">{link.name}</span>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.nav>
+    </>
   );
-}
+};
 
 export default Navbar;

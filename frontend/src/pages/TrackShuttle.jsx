@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import socket from "../socket";
+import { motion } from "framer-motion";
 
 // Fix for default marker icons in react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -21,22 +22,28 @@ function MapUpdater({ driverLocation }) {
       map.flyTo(
         [driverLocation.latitude, driverLocation.longitude],
         map.getZoom(),
-        { animate: true }
+        { animate: true },
       );
     }
   }, [driverLocation, map]);
   return null;
 }
 
-function TrackShuttle() {
+function TrackShuttle({ driverLocation }) {
   const [driverLocations, setDriverLocations] = useState([]);
 
   // Set your default map center (e.g., campus center)
-  const mapCenter = [18.617, 73.9114];
+  const mapCenter = [18.617, 73.9114]; // NST Campus approximate
   const zoom = 15;
 
   // Listen for All Driver Locations
   useEffect(() => {
+    // If props passed specific location (for driver view), use that
+    if (driverLocation) {
+      setDriverLocations([driverLocation]);
+      return;
+    }
+
     function handleAllLocations(locations) {
       setDriverLocations(locations);
     }
@@ -44,12 +51,7 @@ function TrackShuttle() {
     return () => {
       socket.off("all-driver-locations", handleAllLocations);
     };
-  }, []);
-
-  // Log updated driver locations every time they change
-  useEffect(() => {
-    console.log("All driver locations:", driverLocations);
-  }, [driverLocations]);
+  }, [driverLocation]);
 
   // Driver icon
   const driverIcon = new L.Icon({
@@ -58,66 +60,78 @@ function TrackShuttle() {
     iconAnchor: [16, 32],
     popupAnchor: [0, -32],
   });
+
   return (
-    <div className="min-h-screen w-full flex flex-col relative bg-gray-100 dark:bg-gray-900">
-      {/* Header with gradient background - smaller height */}
-      <div className="w-full bg-gradient-to-r from-blue-900/90 to-blue-700/90 text-white p-3 shadow-lg">
-        <div className="container mx-auto">
-          <h1 className="text-2xl md:text-3xl text-center font-bold tracking-tight">
-            Track Shuttle
-          </h1>
-          <p className="text-sm md:text-base text-center text-blue-100 max-w-2xl mx-auto">
-            Real-time tracking of campus shuttles with live updates
-          </p>
-        </div>
-      </div>
+    <div className="w-full flex flex-col h-[calc(100vh-100px)]">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-6 text-center"
+      >
+        <h1 className="text-3xl font-bold tracking-tight mb-2">
+          Live Tracking
+        </h1>
+        <p className="text-muted-foreground">
+          Real-time location updates of active shuttles
+        </p>
+      </motion.div>
 
-      {/* Responsive Map Card Container */}
-      <div className="flex-1 flex flex-col items-center px-2 sm:px-4 md:px-8 min-h-0">
-        <div className="w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden flex-1 flex flex-col min-h-0">
-          <MapContainer
-            center={
-              driverLocations.length > 0
-                ? [driverLocations[0].latitude, driverLocations[0].longitude]
-                : mapCenter
-            }
-            zoom={zoom}
-            className="h-full w-full z-0 flex-1"
-            scrollWheelZoom={true}
-            zoomControl={false}
-          >
-            <MapUpdater driverLocation={driverLocations[0]} />
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.2 }}
+        className="flex-1 w-full relative rounded-3xl overflow-hidden glass-panel border border-white/20 shadow-2xl"
+      >
+        <MapContainer
+          center={
+            driverLocations.length > 0
+              ? [driverLocations[0].latitude, driverLocations[0].longitude]
+              : mapCenter
+          }
+          zoom={zoom}
+          className="h-full w-full z-0"
+          scrollWheelZoom={true}
+          zoomControl={false}
+        >
+          <MapUpdater driverLocation={driverLocations[0]} />
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
 
-            {/* Real driver marker(s) only */}
-            {driverLocations.map((driver) => (
-              <Marker
-                key={driver.id}
-                position={[driver.latitude, driver.longitude]}
-                icon={driverIcon}
-              >
-                <Popup>
-                  <div className="text-center p-1">
-                    <span className="font-bold text-lg text-blue-700 block mb-1">
-                      Driver
-                    </span>
-                    <span className="block text-xs text-gray-500 mb-1">
-                      Lat: {driver.latitude.toFixed(6)}, Lng:{" "}
-                      {driver.longitude.toFixed(6)}
-                    </span>
-                    <span className="text-xs text-gray-600 italic block">
-                      Updated: {new Date().toLocaleTimeString()}
-                    </span>
-                  </div>
-                </Popup>
-              </Marker>
-            ))}
-          </MapContainer>
+          {driverLocations.map((driver) => (
+            <Marker
+              key={driver.id || "driver"}
+              position={[driver.latitude, driver.longitude]}
+              icon={driverIcon}
+            >
+              <Popup className="glass-popup">
+                <div className="text-center p-2">
+                  <span className="font-bold text-lg text-primary block mb-1">
+                    Shuttle
+                  </span>
+                  <span className="block text-xs text-gray-500 mb-1">
+                    Lat: {driver.latitude.toFixed(4)} <br /> Lng:{" "}
+                    {driver.longitude.toFixed(4)}
+                  </span>
+                  <span className="text-xs text-gray-400 italic block">
+                    Just now
+                  </span>
+                </div>
+              </Popup>
+            </Marker>
+          ))}
+        </MapContainer>
+
+        {/* Overlay status pill */}
+        <div className="absolute top-4 right-4 z-[400] bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
+          <span className="relative flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+          </span>
+          {driverLocations.length} Active Shuttles
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
