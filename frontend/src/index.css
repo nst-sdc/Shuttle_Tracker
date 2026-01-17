@@ -2,264 +2,119 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    /* Modern Palette - Light Mode */
+    --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 262 83% 58%; /* Vibrant Purple */
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 199 89% 48%; /* Bright Cyan/Blue */
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 262 83% 58%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 262 83% 58%;
+
+    --radius: 1rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    color-scheme: dark;
-    color: rgb(var(--foreground));
+    /* Modern Palette - Dark Mode (Default/Preferred) */
+    --background: 240 10% 3.9%; /* Deep almost black */
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 263 94% 65%; /* Neon Purple */
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 189 94% 43%; /* Neon Cyan */
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 263 70% 50%;
   }
-}
 
-h1 {
-  @apply text-4xl font-bold text-gray-900 dark:text-gray-100;
-}
-
-h2 {
-  @apply text-3xl font-semibold text-gray-800 dark:text-gray-200;
-}
-
-h3 {
-  @apply text-2xl font-semibold text-gray-800 dark:text-gray-200;
-}
-
-p {
-  @apply text-gray-700 dark:text-gray-300;
-}
-
-:root {
-  --bg: #fff;
-  --text: #222;
-  --toggle-bg: #e2e8f0;
-
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  --bg-color: #fff;
-  --text-color: #18181b;
-  --primary: #2563eb;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  background: var(--bg);
-  color: var(--text);
-  transition: background 0.4s cubic-bezier(.4,2,.6,1), color 0.4s cubic-bezier(.4,2,.6,1);
-  overflow-x: hidden;
-}
-
-html {
-  overflow-x: hidden;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
-
-.dark {
-  --bg: #18181b;
-  --text: #f4f4f5;
-  --toggle-bg: #334155;
-  color-scheme: dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-}
-body, html {
-  transition: background-color 0.3s, color 0.3s;
-}
-
-/* Mobile Responsive Styles */
-@media (max-width: 768px) {
-  h1 {
-    font-size: 2.5em;
-  }
-  
-  button {
-    padding: 0.5em 1em;
-    font-size: 0.9em;
-  }
-}
-
-@media (max-width: 480px) {
-  h1 {
-    font-size: 2em;
-  }
-  
-  button {
-    padding: 0.4em 0.8em;
-    font-size: 0.85em;
-  }
-  nav {
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
-  }
-  .mobile-menu-btn {
-    margin-right: 0.25rem;
-  }
-}
-
-/* Navbar Responsive Styles */
-@media (max-width: 768px) {
-  .mobile-menu-btn {
-    display: block !important;
-  }
-  
-  .desktop-nav {
-    display: none !important;
-  }
-  
-  .mobile-nav-overlay {
-    display: flex !important;
-  }
-}
-
-@media (min-width: 769px) {
-  .mobile-menu-btn {
-    display: none !important;
-  }
-  
-  .desktop-nav {
-    display: flex !important;
-  }
-  
-  .mobile-nav-overlay {
-    display: none !important;
-  }
-}
-
-/* Tablet Styles */
-@media (min-width: 769px) and (max-width: 1024px) {
-  h1 {
-    font-size: 2.8em;
-  }
-}
-
-/* Large Screen Styles */
-@media (min-width: 1025px) {
-  h1 {
-    font-size: 3.2em;
-  }
-}
-
-/* Prevent body scroll when mobile menu is open */
-body.menu-open {
-  overflow: hidden;
-}
-
-/* Ensure proper touch targets on mobile */
-@media (max-width: 768px) {
-  button, a {
-    min-height: 44px;
-    min-width: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
-
-/* Mobile menu overlay improvements */
-.mobile-nav-overlay {
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-}
-
-/* Smooth transitions for all interactive elements */
-* {
-  transition: all 0.2s ease-in-out;
-}
-
-/* Focus styles for accessibility */
-button:focus,
-a:focus {
-  outline: 2px solid #2563eb;
-  outline-offset: 2px;
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  :root {
-    --primary: #0000ff;
-  }
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
   * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    @apply border-border;
   }
+
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-primary selection:text-white;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-xl;
+  }
+
+  .glass-button {
+    @apply bg-white/10 hover:bg-white/20 active:bg-white/30 backdrop-blur-sm border border-white/10 transition-all duration-300;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
+  }
+
+  .text-gradient-subtle {
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-white to-white/60;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/20 rounded-full hover:bg-muted-foreground/30 transition-colors;
 }
