@@ -135,149 +135,197 @@ function Driver({ setUserType }) {
         {showForm && (
           <motion.div
             key="details-form"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="glass-panel p-8 rounded-2xl max-w-md mx-auto mt-10"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.4 }}
+            className="w-full max-w-lg mx-auto mt-10 relative"
           >
-            <h2 className="text-2xl font-bold mb-6 text-center">
-              Driver Details
-            </h2>
-            <form onSubmit={handleDetailsSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Driver Name</label>
-                <div className="relative">
-                  <User className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
-                  <input
-                    type="text"
-                    value={driverName}
-                    onChange={(e) => setDriverName(e.target.value)}
-                    className="w-full pl-10 px-4 py-2 bg-background/50 border border-border rounded-lg focus:ring-2 focus:ring-primary/50 outline-none transition-all"
-                    placeholder="John Doe"
-                    required
-                  />
-                </div>
+            {/* Subtle Glow */}
+            <div className="absolute -inset-1 bg-gray-200 dark:bg-gray-800 rounded-[2rem] blur opacity-20" />
+            <div className="relative glass-panel p-8 md:p-10 rounded-[2rem] border border-white/20 dark:border-white/10 shadow-2xl">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                  Driver Details
+                </h2>
+                <p className="text-gray-500 dark:text-gray-400 mt-2 text-sm">
+                  Fill in your information to start the route
+                </p>
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Bus Number</label>
-                <div className="relative">
-                  <Bus className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
-                  <input
-                    type="text"
-                    value={busNo}
-                    onChange={(e) => setBusNo(e.target.value)}
-                    className="w-full pl-10 px-4 py-2 bg-background/50 border border-border rounded-lg focus:ring-2 focus:ring-primary/50 outline-none transition-all"
-                    placeholder="MH-12-AB-1234"
-                    required
-                  />
+
+              <form onSubmit={handleDetailsSubmit} className="space-y-6">
+                <InputField
+                  label="Driver Name"
+                  icon={User}
+                  value={driverName}
+                  onChange={setDriverName}
+                  placeholder="Enter your full name"
+                />
+
+                <InputField
+                  label="Bus Number"
+                  icon={Bus}
+                  value={busNo}
+                  onChange={setBusNo}
+                  placeholder="ex. MH-12-AB-1234"
+                />
+
+                <InputField
+                  label="Mobile Number"
+                  icon={Phone}
+                  value={mobileNo}
+                  onChange={setMobileNo}
+                  placeholder="ex. 9876543210"
+                  type="tel"
+                />
+
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">
+                    Start Location
+                  </label>
+                  <div className="relative group">
+                    <div className="absolute left-4 top-3.5 w-5 h-5 text-gray-400 group-focus-within:text-foreground transition-colors pointer-events-none">
+                      <MapPin size={20} />
+                    </div>
+                    <select
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                      className="w-full pl-12 pr-4 py-3 bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 focus:border-gray-400 outline-none transition-all appearance-none text-gray-900 dark:text-white"
+                      required
+                    >
+                      <option value="Campus">Campus</option>
+                      <option value="Hostel">Hostel</option>
+                      <option value="On the Way">On the Way</option>
+                    </select>
+                    <div className="absolute right-4 top-4 pointer-events-none">
+                      <motion.div
+                        animate={{ y: [0, 2, 0] }}
+                        transition={{ repeat: Infinity, duration: 2 }}
+                      >
+                        <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[6px] border-t-gray-400" />
+                      </motion.div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Mobile Number</label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
-                  <input
-                    type="tel"
-                    value={mobileNo}
-                    onChange={(e) => setMobileNo(e.target.value)}
-                    className="w-full pl-10 px-4 py-2 bg-background/50 border border-border rounded-lg focus:ring-2 focus:ring-primary/50 outline-none transition-all"
-                    placeholder="9876543210"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Start Location</label>
-                <div className="relative">
-                  <MapPin className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
-                  <select
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    className="w-full pl-10 px-4 py-2 bg-background/50 border border-border rounded-lg focus:ring-2 focus:ring-primary/50 outline-none transition-all appearance-none"
-                    required
-                  >
-                    <option value="Campus">Campus</option>
-                    <option value="Hostel">Hostel</option>
-                    <option value="On the Way">On the Way</option>
-                  </select>
-                </div>
-              </div>
-              <button
-                type="submit"
-                className="w-full py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium mt-4"
-              >
-                Next Step
-              </button>
-            </form>
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  type="submit"
+                  className="w-full py-4 bg-gray-900 dark:bg-white text-white dark:text-black rounded-xl font-bold shadow-lg shadow-gray-200/50 dark:shadow-none transition-all text-lg mt-4"
+                >
+                  Next Step
+                </motion.button>
+              </form>
+            </div>
           </motion.div>
         )}
 
         {showLogin && (
           <motion.div
             key="login-form"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="glass-panel p-8 rounded-2xl max-w-md mx-auto mt-10"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.4 }}
+            className="w-full max-w-lg mx-auto mt-10 relative"
           >
-            <h2 className="text-2xl font-bold mb-2 text-center">
-              Driver Login
-            </h2>
-            <p className="text-muted-foreground text-center mb-6 text-sm">
-              Sign in to manage your shuttle session
-            </p>
-
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Email</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-2 bg-background/50 border border-border rounded-lg focus:ring-2 focus:ring-primary/50 outline-none"
-                  placeholder="driver@example.com"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Password</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-2 bg-background/50 border border-border rounded-lg focus:ring-2 focus:ring-primary/50 outline-none"
-                  placeholder="••••••••"
-                  required
-                />
+            <div className="absolute -inset-1 bg-gray-200 dark:bg-gray-800 rounded-[2rem] blur opacity-20" />
+            <div className="relative glass-panel p-8 md:p-10 rounded-[2rem] border border-white/20 dark:border-white/10 shadow-2xl">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                  Welcome Back
+                </h2>
+                <p className="text-gray-500 dark:text-gray-400 mt-2 text-sm">
+                  Sign in to manage your trip
+                </p>
               </div>
 
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
-              >
-                {isLoading ? "Logging in..." : "Login"}
-              </button>
-
-              <div className="relative my-4">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-border"></span>
+              <form onSubmit={handleLogin} className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-5 py-3 bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 focus:border-gray-400 outline-none transition-all"
+                    placeholder="driver@example.com"
+                    required
+                  />
                 </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
-                    Or continue with
-                  </span>
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-5 py-3 bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 focus:border-gray-400 outline-none transition-all"
+                    placeholder="••••••••"
+                    required
+                  />
                 </div>
-              </div>
 
-              <GoogleLogin
-                onSuccess={handleGoogleLogin}
-                onError={() => toast.error("Google login failed")}
-                useOneTap
-                theme="outline"
-                width="100%"
-              />
-            </form>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full py-4 bg-gray-900 dark:bg-white text-white dark:text-black rounded-xl font-bold shadow-lg shadow-gray-200/50 dark:shadow-none transition-all text-lg"
+                >
+                  {isLoading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg
+                        className="animate-spin h-5 w-5 text-white dark:text-black"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Processing...
+                    </span>
+                  ) : (
+                    "Secure Login"
+                  )}
+                </motion.button>
+
+                <div className="relative my-6">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t border-gray-200 dark:border-gray-700"></span>
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-white dark:bg-black px-2 text-gray-500">
+                      Or continue with
+                    </span>
+                  </div>
+                </div>
+
+                <GoogleLogin
+                  onSuccess={handleGoogleLogin}
+                  onError={() => toast.error("Google login failed")}
+                  useOneTap
+                  theme="outline"
+                  width="100%"
+                  shape="circle"
+                />
+              </form>
+            </div>
           </motion.div>
         )}
 
@@ -325,5 +373,33 @@ function Driver({ setUserType }) {
     </div>
   );
 }
+
+const InputField = ({
+  label,
+  icon: Icon,
+  value,
+  onChange,
+  placeholder,
+  type = "text",
+}) => (
+  <div className="space-y-2">
+    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">
+      {label}
+    </label>
+    <div className="relative group">
+      <div className="absolute left-4 top-3.5 w-5 h-5 text-gray-400 group-focus-within:text-foreground transition-colors pointer-events-none">
+        <Icon size={20} />
+      </div>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full pl-12 pr-4 py-3 bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 focus:border-gray-400 outline-none transition-all text-gray-900 dark:text-white placeholder:text-gray-400"
+        placeholder={placeholder}
+        required
+      />
+    </div>
+  </div>
+);
 
 export default Driver;
