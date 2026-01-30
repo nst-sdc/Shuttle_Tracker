@@ -1,13 +1,23 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LogIn, Mail, Lock, ArrowRight } from "lucide-react";
+import { LogIn, Mail, Lock, ArrowRight, User, Car } from "lucide-react";
 import { GoogleLogin } from "@react-oauth/google";
 
 const Login = ({ setUserType }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const [selectedRole, setSelectedRole] = useState(
+    location.state?.role || "student",
+  );
+
+  useEffect(() => {
+    if (location.state?.role) {
+      setSelectedRole(location.state.role);
+    }
+  }, [location.state]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -42,7 +52,10 @@ const Login = ({ setUserType }) => {
       const response = await fetch("http://localhost:5001/api/auth/google", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ credential: credentialResponse.credential }),
+        body: JSON.stringify({
+          credential: credentialResponse.credential,
+          role: selectedRole, // Pass the toggled role
+        }),
       });
       const data = await response.json();
       if (response.ok) {
@@ -145,17 +158,51 @@ const Login = ({ setUserType }) => {
               </div>
             </div>
 
-            <div className="flex justify-center">
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={() => alert("Google Login Failed")}
-                useOneTap
-                theme="filled_blue"
-                shape="pill"
-                size="large"
-                text="signin_with"
-                width="100%"
-              />
+            <div className="space-y-4">
+              <div className="flex flex-col gap-2 mb-4">
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider ml-1">
+                  Social Login Role
+                </label>
+                <div className="grid grid-cols-2 gap-2 p-1 bg-gray-100 dark:bg-gray-800/80 rounded-xl border border-border">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedRole("student")}
+                    className={`flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all ${
+                      selectedRole === "student"
+                        ? "bg-white dark:bg-gray-700 text-blue-600 shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <User size={14} />
+                    Student
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedRole("driver")}
+                    className={`flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all ${
+                      selectedRole === "driver"
+                        ? "bg-white dark:bg-gray-700 text-indigo-600 shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <Car size={14} />
+                    Driver
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={() => alert("Google Login Failed")}
+                  useOneTap
+                  theme="filled_blue"
+                  shape="pill"
+                  size="large"
+                  text="continue_with"
+                  width="100%"
+                />
+              </div>
             </div>
           </div>
 

@@ -7,7 +7,7 @@ function Home({ userType, setUserType }) {
   const navigate = useNavigate();
 
   const handleRoleSelect = (role) => {
-    navigate(`/${role}`);
+    navigate(`/${role}`, { state: { role } });
   };
 
   const containerVariants = {

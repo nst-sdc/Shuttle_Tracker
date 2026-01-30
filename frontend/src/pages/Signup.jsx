@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   UserPlus,
@@ -12,13 +12,20 @@ import {
 import { GoogleLogin } from "@react-oauth/google";
 
 const Signup = ({ setUserType }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    role: "student",
+    role: location.state?.role || "student",
   });
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.state?.role) {
+      setFormData((prev) => ({ ...prev, role: location.state.role }));
+    }
+  }, [location.state]);
 
   const handleSignup = async (e) => {
     e.preventDefault();
