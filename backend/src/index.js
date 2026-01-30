@@ -9,13 +9,14 @@ const authRouter = require("./routes/auth");
 const { setupSocket } = require("./socket");
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT;
 
 // Middleware
-const allowedOrigins = [
-  "https://shuttle-tracker-gamma.vercel.app",
-  "http://localhost:5173",
-];
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",").map((o) =>
+      o.trim().replace(/\/$/, ""),
+    )
+  : ["https://shuttle-tracker-eta.vercel.app", "http://localhost:5173"];
 
 app.use(
   cors({
