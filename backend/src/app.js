@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 const http = require("http");
@@ -32,7 +31,7 @@ app.use(
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  })
+  }),
 );
 app.use(express.json());
 app.use(cookieParser());
@@ -43,15 +42,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// MongoDB Connection
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
-
 // API routes
 app.use("/api/buses", busRouter);
 app.use("/api/auth", authRouter);
@@ -59,6 +49,11 @@ app.use("/api/auth", authRouter);
 // Test route
 app.get("/", (req, res) => {
   res.send("Shuttle Tracker API is running!");
+});
+
+// Health check
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
 const server = http.createServer(app);
