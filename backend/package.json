@@ -1,11 +1,11 @@
 {
   "name": "shuttle-tracker-backend",
   "version": "1.0.0",
-  "main": "src/app.js",
+  "main": "src/index.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "dependencies": {
     "@prisma/client": "^6.19.2",
