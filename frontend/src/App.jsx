@@ -9,9 +9,22 @@ import TrackShuttle from "./pages/TrackShuttle";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Footer from "./components/Footer";
+import { Navigate } from "react-router-dom";
+
+// Protected Route Component
+const ProtectedRoute = ({ children, allowedRoles, userType }) => {
+  if (!userType) {
+    return <Navigate to="/login" replace />;
+  }
+  if (allowedRoles && !allowedRoles.includes(userType)) {
+    return <Navigate to={userType === "driver" ? "/driver" : "/"} replace />;
+  }
+  return children;
+};
 
 function App() {
   const [userType, _setUserType] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
   // Helper to update both state and localStorage
   const setUserType = useCallback((type) => {
@@ -34,7 +47,16 @@ function App() {
     if (storedType) {
       setUserType(storedType);
     }
+    setAuthLoading(false);
   }, [setUserType]);
+
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
     <Router>
@@ -52,32 +74,59 @@ function App() {
             <Route
               path="/student"
               element={
-                <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-                  <Student setUserType={setUserType} />
-                </div>
+                <ProtectedRoute userType={userType} allowedRoles={["student"]}>
+                  <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+                    <Student />
+                  </div>
+                </ProtectedRoute>
               }
             />
             <Route
               path="/driver"
               element={
-                <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+                <ProtectedRoute userType={userType} allowedRoles={["driver"]}>
                   <Driver setUserType={setUserType} />
-                </div>
+                </ProtectedRoute>
               }
             />
             <Route
               path="/track-shuttle"
               element={
-                <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-                  <TrackShuttle />
-                </div>
+                userType === "driver" ? (
+                  <Navigate to="/driver" replace />
+                ) : (
+                  <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+                    <TrackShuttle />
+                  </div>
+                )
               }
             />
             <Route
               path="/login"
-              element={<Login setUserType={setUserType} />}
+              element={
+                userType ? (
+                  <Navigate
+                    to={userType === "driver" ? "/driver" : "/"}
+                    replace
+                  />
+                ) : (
+                  <Login setUserType={setUserType} />
+                )
+              }
             />
-            <Route path="/signup" element={<Signup />} />
+            <Route
+              path="/signup"
+              element={
+                userType ? (
+                  <Navigate
+                    to={userType === "driver" ? "/driver" : "/"}
+                    replace
+                  />
+                ) : (
+                  <Signup />
+                )
+              }
+            />
           </Routes>
         </main>
 

@@ -23,11 +23,15 @@ model Bus {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
-  password  String?  // Optional for Google users
-  name      String?
-  picture   String?
-  role      String   @default("student") // student or driver
-  createdAt DateTime @default(now())
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  email           String   @unique
+  password        String?  // Optional for Google users
+  name            String?
+  picture         String?
+  role            String   @default("student") // student or driver
+  busNumber       String?  // For drivers
+  driverName      String?  // For drivers
+  mobileNumber    String?  // For drivers
+  currentLocation String?  // For drivers
+  createdAt       DateTime @default(now())
 }

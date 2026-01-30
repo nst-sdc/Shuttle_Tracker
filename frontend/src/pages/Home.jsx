@@ -7,7 +7,6 @@ function Home({ userType, setUserType }) {
   const navigate = useNavigate();
 
   const handleRoleSelect = (role) => {
-    setUserType(role);
     navigate(`/${role}`);
   };
 

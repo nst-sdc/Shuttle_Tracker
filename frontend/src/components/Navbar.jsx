@@ -78,6 +78,17 @@ const Navbar = ({ userType, setUserType }) => {
             <div className="hidden md:flex items-center gap-1">
               <div className="flex items-center bg-gray-100/50 dark:bg-gray-800/50 p-1 rounded-full backdrop-blur-sm border border-gray-200 dark:border-gray-700 mr-4">
                 {navLinks.map((link) => {
+                  // If not logged in: show Home, Track, and Driver (will redirect to login)
+                  if (!userType && link.name === "Student") return null;
+
+                  // If driver: only show Driver (Dashboard)
+                  if (userType === "driver" && link.name !== "Driver")
+                    return null;
+
+                  // If student: hide Driver link
+                  if (userType === "student" && link.name === "Driver")
+                    return null;
+
                   if (link.name === "Login" && userType) return null;
                   const isActive = location.pathname === link.path;
                   return (
@@ -103,7 +114,9 @@ const Navbar = ({ userType, setUserType }) => {
                       )}
                       <span className="relative z-10 flex items-center gap-2">
                         {link.icon}
-                        {link.name}
+                        {link.name === "Driver" && userType === "driver"
+                          ? "Dashboard"
+                          : link.name}
                       </span>
                     </Link>
                   );
@@ -145,6 +158,17 @@ const Navbar = ({ userType, setUserType }) => {
             >
               <div className="glass-panel text-white p-4 space-y-2 m-2 rounded-2xl">
                 {navLinks.map((link, index) => {
+                  // If not logged in: show Home, Track, and Driver
+                  if (!userType && link.name === "Student") return null;
+
+                  // If driver: only show Driver (Dashboard)
+                  if (userType === "driver" && link.name !== "Driver")
+                    return null;
+
+                  // If student: hide Driver link
+                  if (userType === "student" && link.name === "Driver")
+                    return null;
+
                   if (link.name === "Login" && userType) return null;
                   return (
                     <motion.div
@@ -163,7 +187,11 @@ const Navbar = ({ userType, setUserType }) => {
                         }`}
                       >
                         {link.icon}
-                        <span className="font-medium">{link.name}</span>
+                        <span className="font-medium">
+                          {link.name === "Driver" && userType === "driver"
+                            ? "Dashboard"
+                            : link.name}
+                        </span>
                       </Link>
                     </motion.div>
                   );

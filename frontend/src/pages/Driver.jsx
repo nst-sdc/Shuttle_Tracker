@@ -10,12 +10,11 @@ const BACKEND_URL = "https://shuttle-tracker.onrender.com";
 
 function Driver({ setUserType }) {
   const [dateTime, setDateTime] = useState(new Date());
-  const [showForm, setShowForm] = useState(true);
-  const [showLogin, setShowLogin] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Form states
   const [driverName, setDriverName] = useState("");
   const [busNo, setBusNo] = useState("");
   const [mobileNo, setMobileNo] = useState("");
@@ -30,109 +29,98 @@ function Driver({ setUserType }) {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem("jwt_token");
-    const user = localStorage.getItem("driver_user");
-    const details = localStorage.getItem("driver_details");
-
-    if (token && user) {
-      const userData = JSON.parse(user);
-      setEmail(userData.email);
-      setShowForm(false);
-      setShowLogin(false);
-      setIsLoggedIn(true);
-      if (setUserType) setUserType("driver");
-
-      if (details) {
-        const { driverName, busNo, mobileNo, location } = JSON.parse(details);
-        setDriverName(driverName);
-        setBusNo(busNo);
-        setMobileNo(mobileNo);
-        setLocation(location);
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("jwt_token");
+      if (!token) {
+        setIsLoading(false);
+        return;
       }
-    }
-  }, [setUserType]);
 
-  const handleDetailsSubmit = (e) => {
+      try {
+        const res = await fetch("http://localhost:5001/api/auth/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        if (res.ok) {
+          setUserData(data.user);
+          if (!data.user.busNumber) {
+            setShowOnboarding(true);
+            setDriverName(data.user.name || "");
+          } else {
+            setDriverName(data.user.driverName || data.user.name);
+            setBusNo(data.user.busNumber);
+            setMobileNo(data.user.mobileNumber);
+            setLocation(data.user.currentLocation || "Campus");
+          }
+        } else {
+          // If token is invalid, log out
+          handleLogout();
+        }
+      } catch (err) {
+        console.error("Failed to fetch user data:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const handleDetailsSubmit = async (e) => {
     e.preventDefault();
     if (!driverName || !busNo || !mobileNo || !location) {
       toast.error("Please fill all details");
       return;
     }
-    localStorage.setItem(
-      "driver_details",
-      JSON.stringify({
-        driverName,
-        busNo,
-        mobileNo,
-        location,
-      }),
-    );
-    setShowForm(false);
-    setShowLogin(true);
-    toast.success("Details saved! Please login.");
-  };
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    // Simulating login - replace with actual API call if needed
-    setTimeout(() => {
-      setIsLoading(false);
-      if (
-        (email === "driver@example.com" && password === "password") ||
-        (email && password)
-      ) {
-        setShowLogin(false);
-        setIsLoggedIn(true);
-        if (setUserType) setUserType("driver");
-        toast.success("Logged in successfully");
-      } else {
-        toast.error("Invalid credentials");
-      }
-    }, 1000);
-  };
-
-  const handleGoogleLogin = async (credentialResponse) => {
-    setIsLoading(true);
+    const token = localStorage.getItem("jwt_token");
     try {
-      const res = await fetch(`${BACKEND_URL}/api/auth/google`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ credential: credentialResponse.credential }),
+      const res = await fetch("http://localhost:5001/api/auth/update-profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          driverName,
+          busNumber: busNo,
+          mobileNumber: mobileNo,
+          currentLocation: location,
+        }),
       });
       const data = await res.json();
-      if (res.ok && data.token && data.user) {
-        localStorage.setItem("jwt_token", data.token);
-        localStorage.setItem("driver_user", JSON.stringify(data.user));
-        setEmail(data.user.email);
-        setShowLogin(false);
-        setIsLoggedIn(true);
-        if (setUserType) setUserType("driver");
-        toast.success("Logged in with Google");
+      if (res.ok) {
+        setUserData(data.user);
+        setShowOnboarding(false);
+        toast.success("Profile updated successfully!");
       } else {
-        toast.error(data.error || "Google login failed");
+        toast.error(data.error || "Update failed");
       }
-    } catch {
-      toast.error("Login failed");
-    } finally {
-      setIsLoading(false);
+    } catch (err) {
+      toast.error("Something went wrong");
     }
   };
 
   const handleLogout = () => {
     localStorage.removeItem("jwt_token");
+    localStorage.removeItem("user_type");
     localStorage.removeItem("driver_user");
-    // localStorage.removeItem('driver_details'); // Keep details?
-    setIsLoggedIn(false);
-    setShowLogin(true);
     if (setUserType) setUserType(null);
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <Toaster position="top-center" />
       <AnimatePresence mode="wait">
-        {showForm && (
+        {showOnboarding ? (
           <motion.div
             key="details-form"
             initial={{ opacity: 0, scale: 0.95 }}
@@ -149,7 +137,7 @@ function Driver({ setUserType }) {
                   Driver Details
                 </h2>
                 <p className="text-gray-500 dark:text-gray-400 mt-2 text-sm">
-                  Fill in your information to start the route
+                  Complete your profile to start managing trips
                 </p>
               </div>
 
@@ -197,14 +185,6 @@ function Driver({ setUserType }) {
                       <option value="Hostel">Hostel</option>
                       <option value="On the Way">On the Way</option>
                     </select>
-                    <div className="absolute right-4 top-4 pointer-events-none">
-                      <motion.div
-                        animate={{ y: [0, 2, 0] }}
-                        transition={{ repeat: Infinity, duration: 2 }}
-                      >
-                        <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[6px] border-t-gray-400" />
-                      </motion.div>
-                    </div>
                   </div>
                 </div>
 
@@ -212,144 +192,45 @@ function Driver({ setUserType }) {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   type="submit"
-                  className="w-full py-4 bg-gray-900 dark:bg-white text-white dark:text-black rounded-xl font-bold shadow-lg shadow-gray-200/50 dark:shadow-none transition-all text-lg mt-4"
+                  className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-blue-500/30 transition-all text-lg mt-4"
                 >
-                  Next Step
+                  Complete Profile
                 </motion.button>
               </form>
             </div>
           </motion.div>
-        )}
-
-        {showLogin && (
-          <motion.div
-            key="login-form"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.4 }}
-            className="w-full max-w-lg mx-auto mt-10 relative"
-          >
-            <div className="absolute -inset-1 bg-gray-200 dark:bg-gray-800 rounded-[2rem] blur opacity-20" />
-            <div className="relative glass-panel p-8 md:p-10 rounded-[2rem] border border-white/20 dark:border-white/10 shadow-2xl">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                  Welcome Back
-                </h2>
-                <p className="text-gray-500 dark:text-gray-400 mt-2 text-sm">
-                  Sign in to manage your trip
-                </p>
-              </div>
-
-              <form onSubmit={handleLogin} className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-5 py-3 bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 focus:border-gray-400 outline-none transition-all"
-                    placeholder="driver@example.com"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-5 py-3 bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 focus:border-gray-400 outline-none transition-all"
-                    placeholder="••••••••"
-                    required
-                  />
-                </div>
-
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full py-4 bg-gray-900 dark:bg-white text-white dark:text-black rounded-xl font-bold shadow-lg shadow-gray-200/50 dark:shadow-none transition-all text-lg"
-                >
-                  {isLoading ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <svg
-                        className="animate-spin h-5 w-5 text-white dark:text-black"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Processing...
-                    </span>
-                  ) : (
-                    "Secure Login"
-                  )}
-                </motion.button>
-
-                <div className="relative my-6">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t border-gray-200 dark:border-gray-700"></span>
-                  </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-white dark:bg-black px-2 text-gray-500">
-                      Or continue with
-                    </span>
-                  </div>
-                </div>
-
-                <GoogleLogin
-                  onSuccess={handleGoogleLogin}
-                  onError={() => toast.error("Google login failed")}
-                  useOneTap
-                  theme="outline"
-                  width="100%"
-                  shape="circle"
-                />
-              </form>
-            </div>
-          </motion.div>
-        )}
-
-        {isLoggedIn && (
+        ) : (
           <motion.div
             key="dashboard"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex flex-col h-full"
+            className="flex flex-col h-full mt-6"
           >
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-8 glass-panel p-6 rounded-2xl border border-white/10 shadow-xl">
               <div>
-                <h1 className="text-3xl font-bold">Driver Dashboard</h1>
-                <p className="text-muted-foreground">
-                  {dateTime.toLocaleString()}
+                <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
+                  Driver Dashboard
+                </h1>
+                <p className="text-muted-foreground mt-1">
+                  {dateTime.toLocaleDateString()} |{" "}
+                  {dateTime.toLocaleTimeString()}
                 </p>
               </div>
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 bg-destructive/10 text-destructive hover:bg-destructive/20 rounded-lg transition-colors font-medium"
-              >
-                <LogOut className="w-4 h-4" />
-                Logout
-              </button>
+              <div className="flex items-center gap-4">
+                <div className="hidden sm:block text-right">
+                  <p className="font-semibold">{userData?.name}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {userData?.email}
+                  </p>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 px-4 py-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-xl transition-all font-medium border border-red-500/20"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Logout
+                </button>
+              </div>
             </div>
 
             <BusCard
@@ -364,7 +245,9 @@ function Driver({ setUserType }) {
 
             {driverLocation && (
               <div className="mt-8 flex-1">
-                <TrackShuttle driverLocation={driverLocation} />
+                <div className="glass-panel p-4 rounded-3xl border border-white/10 shadow-2xl overflow-hidden h-[500px]">
+                  <TrackShuttle driverLocation={driverLocation} />
+                </div>
               </div>
             )}
           </motion.div>

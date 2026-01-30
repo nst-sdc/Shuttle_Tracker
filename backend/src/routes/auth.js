@@ -47,12 +47,18 @@ router.post("/signup", async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res
-      .status(201)
-      .json({
-        token,
-        user: { email: user.email, name: user.name, role: user.role },
-      });
+    res.status(201).json({
+      token,
+      user: {
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        busNumber: user.busNumber,
+        driverName: user.driverName,
+        mobileNumber: user.mobileNumber,
+        currentLocation: user.currentLocation,
+      },
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -93,7 +99,16 @@ router.post("/login", async (req, res) => {
 
     res.json({
       token,
-      user: { email: user.email, name: user.name, role: user.role },
+      user: {
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        busNumber: user.busNumber,
+        driverName: user.driverName,
+        mobileNumber: user.mobileNumber,
+        currentLocation: user.currentLocation,
+        picture: user.picture,
+      },
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -148,6 +163,10 @@ router.post("/google", async (req, res) => {
         name: user.name,
         picture: user.picture,
         role: user.role,
+        busNumber: user.busNumber,
+        driverName: user.driverName,
+        mobileNumber: user.mobileNumber,
+        currentLocation: user.currentLocation,
       },
     });
   } catch (err) {
@@ -170,10 +189,50 @@ router.get("/me", async (req, res) => {
         name: user.name,
         role: user.role,
         picture: user.picture,
+        busNumber: user.busNumber,
+        driverName: user.driverName,
+        mobileNumber: user.mobileNumber,
+        currentLocation: user.currentLocation,
       },
     });
   } catch (err) {
     res.status(401).json({ error: "Invalid token" });
+  }
+});
+
+// PUT /api/auth/update-profile
+router.put("/update-profile", async (req, res) => {
+  const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "Unauthenticated" });
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { busNumber, driverName, mobileNumber, currentLocation } = req.body;
+
+    const user = await prisma.user.update({
+      where: { id: decoded.id },
+      data: {
+        busNumber,
+        driverName,
+        mobileNumber,
+        currentLocation,
+      },
+    });
+
+    res.json({
+      message: "Profile updated successfully",
+      user: {
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        busNumber: user.busNumber,
+        driverName: user.driverName,
+        mobileNumber: user.mobileNumber,
+        currentLocation: user.currentLocation,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
