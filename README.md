@@ -1,20 +1,20 @@
-# 🚍 Shuttle Tracker
+# Shuttle Tracker
 
 A **real-time bus tracking and pick-up notification system** built for NST students.
 
 ---
 
-## ✨ Overview
+## Overview
 
 The Shuttle Tracker web-app allows students to:
 
-* 📍 See the exact location of their college shuttle
-* 🛎️ Request a pick-up with one tap
-* 🗓️ Display their class schedule to the driver
+- See the exact location of their college shuttle
+- Request a pick-up with one tap
+- Display their class schedule to the driver
 
 This system reduces confusion and unnecessary calls, helping everyone stay on time.
 
-### 🎯 Impact
+### Impact
 
 | Role               | Benefits                                       |
 | ------------------ | ---------------------------------------------- |
@@ -25,17 +25,17 @@ This system reduces confusion and unnecessary calls, helping everyone stay on ti
 
 ---
 
-## 🚀 Tech Stack
+## Tech Stack
 
-* **Frontend:** React 19, Vite, TailwindCSS
-* **Backend:** Node.js, Express.js, Socket.io
-* **Authentication:** Google OAuth, JWT
-* **Real-time Communication:** Socket.io
-* **Maps:** Leaflet, React-Leaflet
+- **Frontend:** React 19, Vite, TailwindCSS
+- **Backend:** Node.js, Express.js, Socket.io
+- **Authentication:** Google OAuth, JWT
+- **Real-time Communication:** Socket.io
+- **Maps:** Leaflet, React-Leaflet
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```bash
 Shuttle_Tracker/
@@ -82,11 +82,11 @@ Shuttle_Tracker/
 
 ---
 
-## 🤝 Contributing Guide
+## Contributing Guide
 
 We welcome contributions from the community!
 
-### 🚦 Quick Start
+### Quick Start
 
 #### 1. Fork & Clone
 
@@ -133,7 +133,7 @@ git checkout -b feature/your-feature-name
 
 ---
 
-### 📄 Environment Variables
+### Environment Variables
 
 Backend `.env` example:
 
@@ -149,11 +149,11 @@ Frontend `.env` (optional):
 VITE_GOOGLE_CLIENT_ID=your_google_client_id
 ```
 
-> 🔐 **Important**: `.env.local` is git-ignored — **never push secrets**.
+> **Important**: `.env.local` is git-ignored — **never push secrets**.
 
 ---
 
-### ✅ Development Checklist
+### Development Checklist
 
 #### Commit Message Format
 
@@ -175,63 +175,63 @@ git commit -m "feat: add feature xyz"
 git push -u origin feature/your-feature-name
 ```
 
-* Open a **Pull Request** with a clear description.
-* Reference issues like: `Fixes #issue-no`.
+- Open a **Pull Request** with a clear description.
+- Reference issues like: `Fixes #issue-no`.
 
 ---
 
-## 📱 Features
+## Features
 
-### 👩‍🎓 For Students
+### For Students
 
-* 🗺️ Real-time Bus Tracking
-* 📱 One-tap Pickup Request
-* ⏰ ETA Predictions
+- Real-time Bus Tracking
+- One-tap Pickup Request
+- ETA Predictions
 
-### 🧑‍✈️ For Drivers
+### For Drivers
 
-* 🗺️ Optimized Routes
-* 📊 Trip Analytics
+- Optimized Routes
+- Trip Analytics
 
-### 👨‍💼 For Administration
+### For Administration
 
-* 📈 Usage Analytics
-* 🚌 Fleet Management
-* 📊 Data Insights
-* ⚙️ System Configuration
-
----
-
-## 🛡️ Security Features
-
-* Google OAuth Login (NST domain)
-* JWT Token Authentication
-* Rate Limiting & API Protection
-* CORS Security
-* Input Validation & Sanitization
-* Environment Variables for Secrets
+- Usage Analytics
+- Fleet Management
+- Data Insights
+- System Configuration
 
 ---
 
-## 💬 Community Support
+## Security Features
 
-* **Discussions:** Open for Q\&A
-* **Bug Reports:** Use Issues with reproducible steps
-* **Feature Requests:** Open an Issue with details
-* **Contact:** Maintainers listed in repo
+- Google OAuth Login (NST domain)
+- JWT Token Authentication
+- Rate Limiting & API Protection
+- CORS Security
+- Input Validation & Sanitization
+- Environment Variables for Secrets
+
+---
+
+## Community Support
+
+- **Discussions:** Open for Q&A
+- **Bug Reports:** Use Issues with reproducible steps
+- **Feature Requests:** Open an Issue with details
+- **Contact:** Maintainers listed in repo
 
 #### First-time contributors?
 
-* Look for labels: `good first issue`, `help wanted`, `documentation`
-* If you're unsure about an issue, **comment and ask for clarification** maintainers are happy to help
-* Join the discussions and ask questions in **Issues** or **Discussions**
+- Look for labels: `good first issue`, `help wanted`, `documentation`
+- If you're unsure about an issue, **comment and ask for clarification** maintainers are happy to help
+- Join the discussions and ask questions in **Issues** or **Discussions**
 
 ---
 
-## 📝 License
+## License
 
 Released under [MIT License](LICENSE).
 
 ---
 
-Happy Contributing ❤️
+Happy Contributing
