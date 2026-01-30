@@ -1,13 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, User, LogIn, Map, LayoutDashboard } from "lucide-react";
+import {
+  Menu,
+  X,
+  User,
+  LogIn,
+  Map,
+  LayoutDashboard,
+  LogOut,
+} from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
+import { useNavigate } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ userType, setUserType }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("jwt_token");
+    localStorage.removeItem("user_type");
+    localStorage.removeItem("driver_user");
+    if (setUserType) setUserType(null);
+    navigate("/login");
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,6 +40,7 @@ const Navbar = () => {
     { name: "Student", path: "/student", icon: <User size={18} /> },
     { name: "Driver", path: "/driver", icon: <LogIn size={18} /> },
     { name: "Track", path: "/track-shuttle", icon: <Map size={18} /> },
+    { name: "Login", path: "/login", icon: <LogIn size={18} /> },
   ];
 
   return (
@@ -59,6 +78,7 @@ const Navbar = () => {
             <div className="hidden md:flex items-center gap-1">
               <div className="flex items-center bg-gray-100/50 dark:bg-gray-800/50 p-1 rounded-full backdrop-blur-sm border border-gray-200 dark:border-gray-700 mr-4">
                 {navLinks.map((link) => {
+                  if (link.name === "Login" && userType) return null;
                   const isActive = location.pathname === link.path;
                   return (
                     <Link
@@ -89,6 +109,15 @@ const Navbar = () => {
                   );
                 })}
               </div>
+              {userType && (
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 rounded-full text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2 transition-all"
+                >
+                  <LogOut size={18} />
+                  Logout
+                </button>
+              )}
               <ThemeToggle />
             </div>
 
@@ -115,27 +144,48 @@ const Navbar = () => {
               className="md:hidden overflow-hidden border-t border-gray-200 dark:border-gray-800"
             >
               <div className="glass-panel text-white p-4 space-y-2 m-2 rounded-2xl">
-                {navLinks.map((link, index) => (
+                {navLinks.map((link, index) => {
+                  if (link.name === "Login" && userType) return null;
+                  return (
+                    <motion.div
+                      key={link.name}
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <Link
+                        to={link.path}
+                        onClick={() => setIsOpen(false)}
+                        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                          location.pathname === link.path
+                            ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
+                            : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                        }`}
+                      >
+                        {link.icon}
+                        <span className="font-medium">{link.name}</span>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+                {userType && (
                   <motion.div
-                    key={link.name}
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: index * 0.1 }}
+                    transition={{ delay: navLinks.length * 0.1 }}
                   >
-                    <Link
-                      to={link.path}
-                      onClick={() => setIsOpen(false)}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                        location.pathname === link.path
-                          ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
-                          : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                      }`}
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setIsOpen(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all font-medium"
                     >
-                      {link.icon}
-                      <span className="font-medium">{link.name}</span>
-                    </Link>
+                      <LogOut size={18} />
+                      Logout
+                    </button>
                   </motion.div>
-                ))}
+                )}
               </div>
             </motion.div>
           )}

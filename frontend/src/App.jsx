@@ -6,6 +6,8 @@ import Home from "./pages/Home";
 import Student from "./pages/Student";
 import Driver from "./pages/Driver";
 import TrackShuttle from "./pages/TrackShuttle";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import Footer from "./components/Footer";
 
 function App() {
@@ -39,7 +41,7 @@ function App() {
       <div className="flex flex-col min-h-screen w-full bg-background transition-colors duration-200 overflow-x-hidden">
         <div className="fixed inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
 
-        <Navbar userType={userType} />
+        <Navbar userType={userType} setUserType={setUserType} />
 
         <main className="relative w-full flex-grow pt-20">
           <Routes>
@@ -71,6 +73,11 @@ function App() {
                 </div>
               }
             />
+            <Route
+              path="/login"
+              element={<Login setUserType={setUserType} />}
+            />
+            <Route path="/signup" element={<Signup />} />
           </Routes>
         </main>
 
