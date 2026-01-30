@@ -41,6 +41,7 @@ function App() {
     const driverUser = localStorage.getItem("driver_user");
     if (driverToken && driverUser) {
       setUserType("driver");
+      setAuthLoading(false);
       return;
     }
     const storedType = localStorage.getItem("user_type");

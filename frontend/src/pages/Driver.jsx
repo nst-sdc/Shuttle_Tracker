@@ -6,7 +6,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { motion, AnimatePresence } from "framer-motion";
 import { LogOut, User, Bus, Phone, MapPin } from "lucide-react";
 
-const BACKEND_URL = "https://shuttle-tracker.onrender.com";
+const BACKEND_URL = import.meta.env.VITE_API_URL;
 
 function Driver({ setUserType }) {
   const [dateTime, setDateTime] = useState(new Date());
@@ -37,7 +37,7 @@ function Driver({ setUserType }) {
       }
 
       try {
-        const res = await fetch("http://localhost:5001/api/auth/me", {
+        const res = await fetch(`${BACKEND_URL}/api/auth/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -75,7 +75,7 @@ function Driver({ setUserType }) {
 
     const token = localStorage.getItem("jwt_token");
     try {
-      const res = await fetch("http://localhost:5001/api/auth/update-profile", {
+      const res = await fetch(`${BACKEND_URL}/api/auth/update-profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

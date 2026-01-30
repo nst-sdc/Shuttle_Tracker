@@ -30,11 +30,14 @@ const Signup = ({ setUserType }) => {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5001/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/auth/signup`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        },
+      );
       const data = await response.json();
       if (response.ok) {
         console.log("Signup success:", data);
@@ -50,14 +53,17 @@ const Signup = ({ setUserType }) => {
 
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
-      const response = await fetch("http://localhost:5001/api/auth/google", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          credential: credentialResponse.credential,
-          role: formData.role, // Pass the selected role
-        }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/auth/google`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            credential: credentialResponse.credential,
+            role: formData.role, // Pass the selected role
+          }),
+        },
+      );
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem("jwt_token", data.token);

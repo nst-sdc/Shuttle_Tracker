@@ -13,8 +13,10 @@ const PORT = process.env.PORT;
 
 // Middleware
 const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(",")
-  : ["https://shuttle-tracker-eta.vercel.app/", "http://localhost:5173"];
+  ? process.env.ALLOWED_ORIGINS.split(",").map((o) =>
+      o.trim().replace(/\/$/, ""),
+    )
+  : ["https://shuttle-tracker-eta.vercel.app", "http://localhost:5173"];
 
 app.use(
   cors({
