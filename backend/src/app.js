@@ -9,7 +9,7 @@ const authRouter = require("./routes/auth");
 const { setupSocket } = require("./socket");
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT;
 
 // Middleware
 const allowedOrigins = [
