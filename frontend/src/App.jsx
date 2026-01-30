@@ -123,7 +123,7 @@ function App() {
                     replace
                   />
                 ) : (
-                  <Signup />
+                  <Signup setUserType={setUserType} />
                 )
               }
             />

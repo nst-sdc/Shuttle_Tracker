@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LogIn, Mail, Lock, ArrowRight, Chrome } from "lucide-react";
+import { LogIn, Mail, Lock, ArrowRight } from "lucide-react";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Login = ({ setUserType }) => {
   const [email, setEmail] = useState("");
@@ -33,6 +34,33 @@ const Login = ({ setUserType }) => {
     } catch (err) {
       console.error("Login error:", err);
       alert("Something went wrong");
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const response = await fetch("http://localhost:5001/api/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ credential: credentialResponse.credential }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem("jwt_token", data.token);
+        localStorage.setItem("user_type", data.user.role);
+        setUserType(data.user.role);
+        if (data.user.role === "driver") {
+          localStorage.setItem("driver_user", JSON.stringify(data.user));
+          navigate("/driver");
+        } else {
+          navigate("/");
+        }
+      } else {
+        alert(data.error || "Google Login failed");
+      }
+    } catch (err) {
+      console.error("Google Login error:", err);
+      alert("Something went wrong with Google Login");
     }
   };
 
@@ -117,13 +145,18 @@ const Login = ({ setUserType }) => {
               </div>
             </div>
 
-            <button
-              type="button"
-              className="w-full py-3 rounded-xl border border-border bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all flex items-center justify-center gap-3 font-medium text-sm"
-            >
-              <Chrome className="w-5 h-5" />
-              Sign in with Google
-            </button>
+            <div className="flex justify-center">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => alert("Google Login Failed")}
+                useOneTap
+                theme="filled_blue"
+                shape="pill"
+                size="large"
+                text="signin_with"
+                width="100%"
+              />
+            </div>
           </div>
 
           <p className="text-center mt-8 text-sm text-muted-foreground">

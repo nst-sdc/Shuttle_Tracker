@@ -136,7 +136,7 @@ router.post("/google", async (req, res) => {
           email,
           name,
           picture,
-          role: "student", // Default role
+          role: req.body.role || "student", // Allow passing role
         },
       });
     }

@@ -7,11 +7,11 @@ import {
   Lock,
   User,
   ArrowRight,
-  Chrome,
   ShieldCheck,
 } from "lucide-react";
+import { GoogleLogin } from "@react-oauth/google";
 
-const Signup = () => {
+const Signup = ({ setUserType }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -38,6 +38,36 @@ const Signup = () => {
     } catch (err) {
       console.error("Signup error:", err);
       alert("Something went wrong");
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const response = await fetch("http://localhost:5001/api/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          credential: credentialResponse.credential,
+          role: formData.role, // Pass the selected role
+        }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem("jwt_token", data.token);
+        localStorage.setItem("user_type", data.user.role);
+        if (setUserType) setUserType(data.user.role);
+        if (data.user.role === "driver") {
+          localStorage.setItem("driver_user", JSON.stringify(data.user));
+          navigate("/driver");
+        } else {
+          navigate("/");
+        }
+      } else {
+        alert(data.error || "Google Signup failed");
+      }
+    } catch (err) {
+      console.error("Google Signup error:", err);
+      alert("Something went wrong with Google Signup");
     }
   };
 
@@ -153,6 +183,32 @@ const Signup = () => {
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </form>
+
+          <div className="mt-8">
+            <div className="relative mb-8">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-border"></div>
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-card px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+
+            <div className="flex justify-center">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => alert("Google Signup Failed")}
+                useOneTap
+                theme="filled_blue"
+                shape="pill"
+                size="large"
+                text="signup_with"
+                width="100%"
+              />
+            </div>
+          </div>
 
           <p className="text-center mt-6 text-sm text-muted-foreground">
             Already have an account?{" "}
